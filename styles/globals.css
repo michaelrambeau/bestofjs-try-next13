@@ -34,6 +34,9 @@
     --ring: 215 20.2% 65.1%;
 
     --radius: 0.5rem;
+
+    --graphBackgroundColor1: #fbd38d;
+    --graphBackgroundColor2: #feebc8;
   }
 
   .dark {
@@ -49,7 +52,7 @@
     --popover: 224 71% 4%;
     --popover-foreground: 215 20.2% 65.1%;
 
-    --border: 216 34% 17%;
+    --border: 216 34% 27%;
     --input: 216 34% 17%;
 
     --card: 224 71% 4%;
@@ -67,6 +70,9 @@
     --ring: 216 34% 17%;
 
     --radius: 0.5rem;
+
+    --graphBackgroundColor1: #9c4221;
+    --graphBackgroundColor2: #7b341e;
   }
 }
 
@@ -78,4 +84,9 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+}
+
+.app-container {
+  max-width: 1080px;
+  margin: 0 auto;
 }
