@@ -3,6 +3,8 @@ import * as mingo from "mingo";
 import { RawObject } from "mingo/types";
 import slugify from "slugify";
 
+import { filterProjectsByQuery } from "@/components/search-palette/find-projects";
+
 // const FETCH_ALL_PROJECTS_URL = process.env.JSON_API;
 const FETCH_ALL_PROJECTS_URL = "https://bestofjs-static-api.vercel.app";
 
@@ -23,6 +25,7 @@ type QueryParams = {
   limit: number;
   skip: number;
   projection: RawObject;
+  query: string;
 };
 
 const defaultQueryParams: QueryParams = {
@@ -31,6 +34,7 @@ const defaultQueryParams: QueryParams = {
   limit: 20,
   skip: 0,
   projection: {},
+  query: "",
 };
 
 const defaultTagSearchQuery = {
@@ -65,45 +69,112 @@ export function createSearchClient() {
     return data;
   }
 
+  function findProjectsWithoutTextQuery(
+    projectCollection: BestOfJS.RawProject[],
+    searchQuery: QueryParams
+  ) {
+    const { criteria, projection, sort, skip, limit } = searchQuery;
+    let cursor = mingo.find(projectCollection, criteria, projection);
+    const total = cursor.count();
+
+    // const allRawProjects = cursor.all() as BestOfJS.RawProject[];
+
+    const projects = mingo
+      .find(projectCollection, criteria, projection)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .all() as BestOfJS.RawProject[];
+
+    return { projects, total };
+  }
+
+  function findProjectsWithTextQuery(
+    projectCollection: BestOfJS.RawProject[],
+    searchQuery: QueryParams,
+    query: string
+  ) {
+    const { criteria, projection, sort, skip, limit } = searchQuery;
+
+    const filteredProjects = mingo
+      .find(projectCollection, criteria, projection)
+      .sort(sort)
+      .all() as BestOfJS.RawProject[];
+
+    const foundProjects = filterProjectsByQuery<BestOfJS.RawProject>(
+      filteredProjects,
+      query
+    );
+    const paginatedProjects = foundProjects.slice(skip, limit);
+
+    return { projects: paginatedProjects, total: foundProjects.length };
+  }
+
   return {
     async findProjects(rawSearchQuery: Partial<QueryParams>) {
       const searchQuery = { ...defaultQueryParams, ...rawSearchQuery };
       debug("Find", searchQuery);
-      const { criteria, sort, skip, limit, projection } = searchQuery;
+      const { criteria, sort, skip, limit, projection, query } = searchQuery;
       const { projectCollection, populate, tagsByKey, lastUpdateDate } =
         await getData();
-      let cursor = mingo.find(projectCollection, criteria, projection);
-      const total = cursor.count();
 
-      const allRawProjects = cursor.all() as BestOfJS.RawProject[];
+      // let cursor = mingo.find(projectCollection, criteria, projection);
+      // const total = cursor.count();
 
-      const rawProjects = mingo
-        .find(projectCollection, criteria, projection)
-        .sort(sort)
-        .skip(skip)
-        .limit(limit)
-        .all() as BestOfJS.RawProject[];
+      // const allRawProjects = cursor.all() as BestOfJS.RawProject[];
+
+      // const rawProjects = mingo
+      //   .find(projectCollection, criteria, projection)
+      //   .sort(sort)
+      //   .skip(skip)
+      //   .limit(limit)
+      //   .all() as BestOfJS.RawProject[];
+
+      const { projects: rawProjects, total } = query
+        ? findProjectsWithTextQuery(projectCollection, searchQuery, query)
+        : findProjectsWithoutTextQuery(projectCollection, searchQuery);
 
       const projects = rawProjects.map(populate);
 
       const tagIds: string[] = (criteria?.tags as any)?.$all || [];
       const selectedTags = tagIds.map((tag) => tagsByKey[tag]);
 
-      const relevantTagIds =
-        tagIds.length > 0
-          ? getResultRelevantTags(allRawProjects, tagIds).map(
-              ([id, count]) => id
-            )
-          : [];
+      // const relevantTagIds =
+      //   tagIds.length > 0
+      //     ? getResultRelevantTags(allRawProjects, tagIds).map(
+      //         ([id, count]) => id
+      //       )
+      //     : [];
 
-      const relevantTags = relevantTagIds.map((tag) => tagsByKey[tag]);
+      // const relevantTags = relevantTagIds.map((tag) => tagsByKey[tag]);
 
       return {
         projects,
         selectedTags,
-        relevantTags,
+        relevantTags: [],
         total,
         lastUpdateDate,
+      };
+    },
+
+    async searchProjects(rawSearchQuery: Partial<QueryParams>) {
+      const searchQuery = { ...defaultQueryParams, ...rawSearchQuery };
+      const { criteria, sort, skip, limit, projection, query } = searchQuery;
+      const { projectCollection, populate, tagsByKey, lastUpdateDate } =
+        await getData();
+      let cursor = mingo.find(projectCollection, criteria, projection);
+      const filteredProjects = cursor.all() as BestOfJS.RawProject[];
+      const foundProjects = filterProjectsByQuery(filteredProjects, query);
+      const total = foundProjects.length;
+      const paginatedProjects = foundProjects.slice(skip, limit);
+      const projects = paginatedProjects.map(populate);
+
+      return {
+        projects,
+        // selectedTags,
+        // relevantTags,
+        total,
+        // lastUpdateDate,
       };
     },
 
@@ -182,32 +253,25 @@ export function createSearchClient() {
 
     async getSearchIndex() {
       const { projectCollection } = await getData();
+      const projection = {
+        full_name: 1,
+        name: 1,
+        owner_id: 1,
+        icon: 1,
+        npm: 1,
+        description: 1,
+        stars: 1,
+        tags: 1,
+      };
+      const rawProjects = mingo
+        .find(projectCollection, {}, projection)
+        .sort({ stars: -1 })
+        .all() as BestOfJS.RawProject[];
 
-      function projectToDocument(project: BestOfJS.RawProject) {
-        const {
-          name,
-          description,
-          icon,
-          npm,
-          owner_id,
-          full_name,
-          stars,
-          tags,
-        } = project;
-        return {
-          full_name,
-          name,
-          owner_id,
-          icon,
-          npm,
-          description,
-          stars,
-          tags,
-          slug: getProjectId(project),
-        } as BestOfJS.SearchIndexProject;
-      }
-
-      return projectCollection.map(projectToDocument);
+      return rawProjects.map((project) => ({
+        ...project,
+        slug: getProjectId(project),
+      })) as BestOfJS.SearchIndexProject[];
     },
   };
 }

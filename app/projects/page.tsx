@@ -176,14 +176,15 @@ function CurrentTags({
 }
 
 async function getData(
-  query: ProjectPageSearchParams
+  searchParams: ProjectPageSearchParams
 ): Promise<ProjectsPageData> {
-  const { tags, sort, page, limit } = parseSearchParams(query);
+  const { tags, sort, page, limit, query } = parseSearchParams(searchParams);
   const sortOption = getSortOption(sort);
 
   const { projects, selectedTags, relevantTags, total } =
     await searchClient.findProjects({
       criteria: tags.length > 0 ? { tags: { $all: tags } } : {},
+      query,
       sort: sortOption.sort,
       skip: limit * (page - 1),
       limit,

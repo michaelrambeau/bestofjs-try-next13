@@ -36,7 +36,7 @@ export function parseSearchParams(
   params: ProjectPageSearchParams
 ): ProjectSearchQuery {
   return {
-    query: "", // TODO implement full text search
+    query: params.query || "", // TODO clean input?
     tags: toArray(params.tags),
     page: toInteger(params.page, 1),
     limit: toInteger(params.limit, 10),

@@ -46,10 +46,9 @@ declare namespace BestOfJS {
     | "name"
     | "npm"
     | "owner_id"
-    | "slug"
     | "stars"
     | "tags"
-  >;
+  > & { slug: string };
 
   // Project with extra data coming from the dynamic API
   interface ProjectDetails extends Project {

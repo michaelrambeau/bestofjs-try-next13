@@ -5,6 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { MainNav } from "@/components/main-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { SearchContainer } from "@/app/search-container";
 
 export function SiteHeader() {
   return (
@@ -12,6 +13,8 @@ export function SiteHeader() {
       <div className="app-container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <MainNav items={siteConfig.mainNav} />
         <div className="flex flex-1 items-center justify-end space-x-4">
+          {/* @ts-expect-error Server Component */}
+          <SearchContainer />
           <nav className="flex items-center space-x-1">
             <Link
               href={siteConfig.links.github}
