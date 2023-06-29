@@ -1,6 +1,8 @@
 import NextLink from "next/link";
 import { GoFlame, GoGift } from "react-icons/go";
 
+import { Card } from "@/components/ui/card";
+import { CardHeader } from "@/components/core";
 import { SectionHeading } from "@/components/core/section";
 import {
   ProjectScore,
@@ -36,16 +38,18 @@ export default async function IndexPage() {
 
 function HotProjectList({ projects }: { projects: BestOfJS.Project[] }) {
   return (
-    <div>
-      <SectionHeading
-        icon={<GoFlame fontSize={32} />}
-        title="Hot Projects"
-        subtitle={
-          <>
-            by number of stars added <b>the last 24 hours</b>
-          </>
-        }
-      />
+    <Card>
+      <CardHeader>
+        <SectionHeading
+          icon={<GoFlame fontSize={48} />}
+          title="Hot Projects"
+          subtitle={
+            <>
+              by number of stars added <b>the last 24 hours</b>
+            </>
+          }
+        />
+      </CardHeader>
       <ProjectTable
         projects={projects}
         showDetails={false}
@@ -62,22 +66,24 @@ function HotProjectList({ projects }: { projects: BestOfJS.Project[] }) {
           </NextLink>
         }
       />
-    </div>
+    </Card>
   );
 }
 
 function NewestProjectList({ projects }: { projects: BestOfJS.Project[] }) {
   return (
-    <div>
-      <SectionHeading
-        icon={<GoGift fontSize={32} />}
-        title="Recently Added Projects"
-        subtitle={
-          <>
-            Latest additions to <i>Best of JS</i>
-          </>
-        }
-      />
+    <Card>
+      <CardHeader>
+        <SectionHeading
+          icon={<GoGift fontSize={48} />}
+          title="Recently Added Projects"
+          subtitle={
+            <>
+              Latest additions to <i>Best of JS</i>
+            </>
+          }
+        />
+      </CardHeader>
       <ProjectTable
         projects={projects}
         showDetails={false}
@@ -94,7 +100,7 @@ function NewestProjectList({ projects }: { projects: BestOfJS.Project[] }) {
           </NextLink>
         }
       />
-    </div>
+    </Card>
   );
 }
 

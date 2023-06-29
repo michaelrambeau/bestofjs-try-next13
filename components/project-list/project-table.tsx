@@ -26,7 +26,7 @@ type Props = {
 
 export const ProjectTable = ({ projects, footer, ...otherProps }: Props) => {
   return (
-    <div className="table-container rounded-lg border">
+    <div className="table-container">
       <table className="w-full">
         <tbody className="">
           {projects.map((project) => {
@@ -43,7 +43,7 @@ export const ProjectTable = ({ projects, footer, ...otherProps }: Props) => {
         {footer && (
           <tfoot className="">
             <tr>
-              <Cell colSpan={5} className="border-0 py-4 text-center">
+              <Cell colSpan={5} className="border-0 p-4 text-center">
                 {footer}
               </Cell>
             </tr>
@@ -169,7 +169,7 @@ export const ProjectScore = ({
 };
 
 const Cell = ({ className, ...props }: { className: string } & any) => (
-  <td className={cn(`border-b border-dashed`, className)} {...props} />
+  <td className={cn(`border-b`, className)} {...props} />
 );
 
 const formatNumber = (number: number) => numeral(number).format("a");

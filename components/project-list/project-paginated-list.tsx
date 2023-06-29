@@ -1,8 +1,10 @@
 import React from "react";
 
+import { Card } from "@/components/ui/card";
+
 import {
+  BottomPaginationControls,
   TopPaginationControls,
-  // BottomPaginationControls,
 } from "../core/pagination/pagination-controls";
 import { computePaginationState } from "../core/pagination/pagination-state";
 import { ProjectSortOrderPicker } from "./project-sort-order-picker";
@@ -27,9 +29,6 @@ export const ProjectPaginatedList = ({
   buildPageURL,
   searchState,
 }: Props) => {
-  // const { pageNumbers } = PaginationContainer.useContainer();
-  // const { navigate } = useNextLocation();
-
   const showPagination = total > limit;
   const showSortOptions = total > 1;
   const paginationState = computePaginationState({
@@ -39,9 +38,9 @@ export const ProjectPaginatedList = ({
   });
 
   return (
-    <div>
+    <Card>
       {(showSortOptions || showPagination) && (
-        <div className="mb-4 flex flex-col justify-between space-x-4 md:flex-row">
+        <div className="flex flex-col justify-between space-x-4 border-b p-4 md:flex-row">
           <div>
             {showSortOptions && (
               <ProjectSortOrderPicker
@@ -51,12 +50,10 @@ export const ProjectPaginatedList = ({
             )}
           </div>
           {showPagination && (
-            <div>
-              <TopPaginationControls
-                paginationState={paginationState}
-                buildPageURL={buildPageURL}
-              />
-            </div>
+            <TopPaginationControls
+              paginationState={paginationState}
+              buildPageURL={buildPageURL}
+            />
           )}
         </div>
       )}
@@ -66,9 +63,16 @@ export const ProjectPaginatedList = ({
         metricsCell={(project) => (
           <ProjectScore project={project} sortOptionId={sortOptionId} />
         )}
+        footer={
+          <div className="flex justify-end">
+            <BottomPaginationControls
+              paginationState={paginationState}
+              buildPageURL={buildPageURL}
+            />
+          </div>
+        }
       />
-      {/* {showPagination && <BottomPaginationControls {...paginationState} />} */}
-    </div>
+    </Card>
   );
 };
 

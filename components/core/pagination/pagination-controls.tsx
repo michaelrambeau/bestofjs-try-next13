@@ -22,20 +22,8 @@ type Props<T> = {
 export const TopPaginationControls = <T extends PaginationProps>(
   props: Props<T>
 ) => {
-  const { paginationState, buildPageURL } = props;
-  const { from, to, total, hasPreviousPage, hasNextPage } = paginationState;
-
-  const previousPageURL = buildPageURL(
-    (state: T) =>
-      ({
-        ...state,
-        page: state.page - 1,
-      } as T)
-  );
-  const nextPageURL = buildPageURL((state: T) => ({
-    ...state,
-    page: state.page + 1,
-  }));
+  const { paginationState } = props;
+  const { from, to, total } = paginationState;
 
   return (
     <div className="flex items-center">
@@ -49,19 +37,40 @@ export const TopPaginationControls = <T extends PaginationProps>(
           </>
         )}
       </div>
-      <div className="grid grid-cols-2 gap-2">
-        <PaginationButton href={previousPageURL} isDisabled={!hasPreviousPage}>
-          <ChevronLeftIcon className="h-4 w-4" />
-          Prev
-        </PaginationButton>
-        <PaginationButton href={nextPageURL} isDisabled={!hasNextPage}>
-          Next
-          <ChevronRightIcon className="h-4 w-4" />
-        </PaginationButton>
-      </div>
     </div>
   );
 };
+
+export function BottomPaginationControls<T extends PaginationProps>(
+  props: Props<T>
+) {
+  const { paginationState, buildPageURL } = props;
+  const { hasPreviousPage, hasNextPage } = paginationState;
+
+  const previousPageURL = buildPageURL(
+    (state: T) =>
+      ({
+        ...state,
+        page: state.page - 1,
+      } as T)
+  );
+  const nextPageURL = buildPageURL((state: T) => ({
+    ...state,
+    page: state.page + 1,
+  }));
+  return (
+    <div className="flex gap-2">
+      <PaginationButton href={previousPageURL} isDisabled={!hasPreviousPage}>
+        <ChevronLeftIcon className="h-4 w-4" />
+        Prev
+      </PaginationButton>
+      <PaginationButton href={nextPageURL} isDisabled={!hasNextPage}>
+        Next
+        <ChevronRightIcon className="h-4 w-4" />
+      </PaginationButton>
+    </div>
+  );
+}
 
 function PaginationButton({
   href,

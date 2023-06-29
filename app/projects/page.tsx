@@ -47,8 +47,16 @@ type PageProps = {
   searchParams: ProjectPageSearchParams;
 };
 export default async function Projects({ searchParams }: PageProps) {
-  const { projects, page, limit, total, sortOptionId, selectedTags, allTags } =
-    await getData(searchParams);
+  const {
+    projects,
+    page,
+    limit,
+    total,
+    sortOptionId,
+    selectedTags,
+    relevantTags,
+    allTags,
+  } = await getData(searchParams);
 
   const searchState = parseSearchParams(searchParams);
 
@@ -70,6 +78,7 @@ export default async function Projects({ searchParams }: PageProps) {
         buildPageURL={buildPageURL}
         allTags={allTags}
       />
+      <RelevantTags tags={relevantTags} buildPageURL={buildPageURL} />
       <ProjectPaginatedList
         projects={projects}
         page={page}
@@ -130,6 +139,36 @@ function ShowNumberOfProject({ count }: { count: number }) {
   );
 }
 
+function RelevantTags({
+  tags,
+  buildPageURL,
+}: {
+  tags: BestOfJS.Tag[];
+  buildPageURL: SearchUrlBuilder<ProjectSearchQuery>;
+}) {
+  return (
+    <div className="mb-4 flex flex-wrap gap-2">
+      {tags.map((tag) => {
+        const url = buildPageURL((state) => ({
+          ...state,
+          page: 1,
+          tags: [...state.tags, tag.code],
+        }));
+        return (
+          <NextLink
+            key={tag.code}
+            href={url}
+            className={badgeVariants({ variant: "outline" })}
+          >
+            {tag.name}
+            <PlusIcon className="h-5 w-5" />
+          </NextLink>
+        );
+      })}
+    </div>
+  );
+}
+
 function CurrentTags({
   tags,
   buildPageURL,
@@ -144,12 +183,11 @@ function CurrentTags({
     (tag) => !currentTagCodes.includes(tag.code)
   );
   return (
-    <div className="mb-4 inline-flex gap-2">
-      {/* <TagPickerPopover allTags={tagsToAdd} /> */}
-      <SearchPageTagPicker
+    <div className="mb-4 flex flex-wrap gap-2">
+      {/* <SearchPageTagPicker
         allTags={allTags}
         currentTagCodes={currentTagCodes}
-      />
+      /> */}
       {tags.map((tag) => {
         const url = buildPageURL((state) => ({
           ...state,
@@ -167,10 +205,6 @@ function CurrentTags({
           </NextLink>
         );
       })}
-      {/* <button className="btn btn-outline btn-warning gap-2 normal-case">
-        Add tag
-        <PlusIcon className="h-5 w-5" />
-      </button> */}
     </div>
   );
 }
