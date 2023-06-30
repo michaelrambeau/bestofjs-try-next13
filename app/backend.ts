@@ -20,7 +20,9 @@ type Data = {
 };
 
 type QueryParams = {
-  criteria: RawObject & { tags?: { $all: string[] } | { $in: string[] } };
+  criteria: RawObject & {
+    tags?: { $all: string[] } | { $in: string[] } | { $nin: string[] };
+  };
   sort: RawObject;
   limit: number;
   skip: number;
@@ -96,12 +98,13 @@ export function createSearchClient() {
 
     const paginatedProjects = foundProjects.slice(skip, skip + limit);
 
-    const selectedTagIds: string[] = criteria?.tags?.$all || [];
+    const selectedTagIds: string[] =
+      (criteria.tags && "$all" in criteria?.tags && criteria?.tags?.$all) || [];
 
     const relevantTagIds = getResultRelevantTags(
       foundProjects,
       selectedTagIds
-    ).map(([id, count]) => id);
+    ).map(([id /*, count*/]) => id); // TODO include number of projects by tag?
     return {
       projects: paginatedProjects,
       total: foundProjects.length,
@@ -113,13 +116,9 @@ export function createSearchClient() {
     async findProjects(rawSearchQuery: Partial<QueryParams>) {
       const searchQuery = normalizeSearchQuery(rawSearchQuery);
       debug("Find", searchQuery);
-      const { criteria, sort, skip, limit, projection, query } = searchQuery;
+      const { criteria, query } = searchQuery;
       const { projectCollection, populate, tagsByKey, lastUpdateDate } =
         await getData();
-
-      // const areTagsIncludedInProjection =
-      //   Object.keys(projection).length > 1 &&
-      //   !Object.keys(projection).includes("tags");
 
       const {
         projects: rawProjects,
