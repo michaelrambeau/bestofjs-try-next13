@@ -81,7 +81,7 @@ function HotProjectList({ projects }: { projects: BestOfJS.Project[] }) {
             passHref
             className={cn(
               buttonVariants({ variant: "link" }),
-              "text-md w-full"
+              "text-md w-full text-secondary-foreground"
             )}
           >
             View full rankings »
@@ -118,7 +118,7 @@ function NewestProjectList({ projects }: { projects: BestOfJS.Project[] }) {
             passHref
             className={cn(
               buttonVariants({ variant: "link" }),
-              "text-md w-full"
+              "text-md w-full text-secondary-foreground"
             )}
           >
             View more »

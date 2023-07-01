@@ -4,8 +4,6 @@ import { GoBook } from "react-icons/go";
 import { Card, CardHeader } from "@/components/core/card";
 import { ErrorBoundary } from "@/app/error-handling";
 
-import "./readme.css";
-
 export async function ReadmeCard({ project }: { project: BestOfJS.Project }) {
   return (
     <Card>

@@ -19,7 +19,9 @@
     --card: 0 0% 100%;
     --card-foreground: 222.2 47.4% 11.2%;
 
-    --primary: 222.2 47.4% 11.2%;
+    /* --primary: 222.2 47.4% 11.2%; */
+    /* `orange10` from Radix (dark orange) instead of default "Oxford blue" */
+    --primary: 24 100% 46.5%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -58,7 +60,9 @@
     --card: 224 71% 4%;
     --card-foreground: 213 31% 91%;
 
-    --primary: 210 40% 98%;
+    /* --primary: 210 40% 98%; */
+    /* orange6 from Radix instead of "SeaSalt" light gray */
+    --primary: 25 100% 82.8%;
     --primary-foreground: 222.2 47.4% 1.2%;
 
     --secondary: 222.2 47.4% 11.2%;
@@ -73,6 +77,8 @@
 
     --graphBackgroundColor1: #9c4221;
     --graphBackgroundColor2: #7b341e;
+
+    --link-foreground: 24 100% 75.3%;
   }
 }
 
@@ -89,4 +95,10 @@
 .app-container {
   max-width: 1080px;
   margin: 0 auto;
+}
+
+/* Override the behavior provided by reset CSS to display correctly badges in projects README */
+.markdown-body img,
+.markdown-body svg {
+  display: inherit;
 }

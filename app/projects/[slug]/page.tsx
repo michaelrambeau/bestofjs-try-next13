@@ -4,6 +4,7 @@ import { getHotProjectsRequest } from "@/app/backend-search-requests";
 import { ProjectDetailsGitHubCard } from "./project-details-github/github-card";
 import { ProjectHeader } from "./project-header";
 import { ReadmeCard } from "./project-readme/project-readme";
+import "./project-readme/readme.css";
 
 type PageProps = {
   params: {
