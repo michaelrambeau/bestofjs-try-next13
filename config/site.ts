@@ -4,16 +4,6 @@ export const siteConfig = {
   name: "Best of JS",
   description:
     "Check out the most popular open-source projects and the latest trends about the web platform: React, Bue.js, Node.js, Bun, Deno...",
-  mainNav: [
-    {
-      title: "Projects",
-      href: "/projects",
-    },
-    {
-      title: "Tags",
-      href: "/tags",
-    },
-  ],
   links: {
     github: "https://github.com/bestofjs/bestofjs-webui",
   },
