@@ -1,9 +1,20 @@
 import NextLink from "next/link";
-import { GoFlame, GoGift } from "react-icons/go";
+import numeral from "numeral";
+import { GoFlame, GoGift, GoHeart, GoPlus } from "react-icons/go";
 
-import { Card } from "@/components/ui/card";
-import { CardHeader } from "@/components/core";
+import {
+  ADD_PROJECT_REQUEST_URL,
+  APP_DISPLAY_NAME,
+  APP_REPO_URL,
+  SPONSOR_URL,
+} from "@/config/site";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { CardHeader, StarIcon } from "@/components/core";
 import { SectionHeading } from "@/components/core/section";
+import { ExternalLink } from "@/components/core/typography";
 import {
   ProjectScore,
   ProjectTable,
@@ -16,9 +27,9 @@ import {
 } from "./backend-search-requests";
 
 export default async function IndexPage() {
-  const { hotProjects, newestProjects } = await getData();
+  const { hotProjects, newestProjects, bestOfJSProject } = await getData();
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <div className="flex flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
           The best of JS and friends
@@ -32,6 +43,14 @@ export default async function IndexPage() {
       <HotProjectList projects={hotProjects} />
 
       <NewestProjectList projects={newestProjects} />
+
+      <Separator />
+
+      <BestOfJSSection project={bestOfJSProject} />
+
+      <Separator />
+
+      <MoreProjectsSection />
     </div>
   );
 }
@@ -60,7 +79,10 @@ function HotProjectList({ projects }: { projects: BestOfJS.Project[] }) {
           <NextLink
             href={`/projects?sort=daily`}
             passHref
-            className="btn btn-outline"
+            className={cn(
+              buttonVariants({ variant: "link" }),
+              "text-md w-full"
+            )}
           >
             View full rankings »
           </NextLink>
@@ -94,7 +116,10 @@ function NewestProjectList({ projects }: { projects: BestOfJS.Project[] }) {
           <NextLink
             href={`/projects?sort=newest`}
             passHref
-            className="btn btn-outline"
+            className={cn(
+              buttonVariants({ variant: "link" }),
+              "text-md w-full"
+            )}
           >
             View more »
           </NextLink>
@@ -104,6 +129,80 @@ function NewestProjectList({ projects }: { projects: BestOfJS.Project[] }) {
   );
 }
 
+function BestOfJSSection({ project }: { project: BestOfJS.Project | null }) {
+  return (
+    <div className="flex flex-col justify-between gap-4 md:flex-row">
+      <div>
+        <SectionHeading
+          className="mb-4"
+          icon={<GoHeart fontSize={32} />}
+          title={<>Do you find {APP_DISPLAY_NAME} useful?</>}
+        />
+        <p className="mb-4">
+          Show your appreciation by starring the project on{" "}
+          <ExternalLink url={APP_REPO_URL}>GitHub</ExternalLink>, or becoming a{" "}
+          <ExternalLink url={SPONSOR_URL}>sponsor</ExternalLink>.
+        </p>
+        <p>Thank you for your support!</p>
+      </div>
+      <div className="flex flex-col gap-4">
+        {project && (
+          <a
+            href={APP_REPO_URL}
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "text-md min-w-[260px]"
+            )}
+          >
+            Star on GitHub
+            <span className="align-center ml-4 inline-flex">
+              {formatNumber(project.stars)} <StarIcon size={24} />
+            </span>
+          </a>
+        )}
+        <a
+          href={SPONSOR_URL}
+          className={cn(
+            buttonVariants({ variant: "outline", size: "lg" }),
+            "text-md"
+          )}
+        >
+          Sponsor
+          <span className="align-center ml-4 inline-flex">
+            <GoHeart size={20} />
+          </span>
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function MoreProjectsSection() {
+  return (
+    <div>
+      <SectionHeading
+        className="mb-4"
+        icon={<GoPlus fontSize={32} />}
+        title="Do you want more projects?"
+      />
+      <p>
+        <i>{APP_DISPLAY_NAME}</i> is a curated list of about 1500 open-source
+        projects related to the web platform and Node.js.
+      </p>
+      <p>
+        If you want to suggest a new project, please click on the following
+        link:{" "}
+        <ExternalLink url={ADD_PROJECT_REQUEST_URL}>
+          recommend a new project
+        </ExternalLink>
+        .
+      </p>
+    </div>
+  );
+}
+
+const formatNumber = (number: number) => numeral(number).format("");
+
 async function getData() {
   const { projects: hotProjects } = await searchClient.findProjects(
     getHotProjectsRequest()
@@ -111,5 +210,8 @@ async function getData() {
   const { projects: newestProjects } = await searchClient.findProjects(
     getLatestProjects()
   );
-  return { hotProjects, newestProjects };
+  const bestOfJSProject = await searchClient.findOne({
+    full_name: "bestofjs/bestofjs-webui",
+  });
+  return { hotProjects, newestProjects, bestOfJSProject };
 }

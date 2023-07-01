@@ -3,7 +3,7 @@ import { IconBaseProps } from "react-icons";
 import { GoTag } from "react-icons/go";
 import { MdStarBorder } from "react-icons/md";
 
-export const StarIcon = () => <MdStarBorder />;
+export const StarIcon = (props: IconBaseProps) => <MdStarBorder {...props} />;
 
 export const TagIcon = (props: IconBaseProps) => <GoTag {...props} />;
 
