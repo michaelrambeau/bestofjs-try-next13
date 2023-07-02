@@ -66,7 +66,7 @@ const ProjectTableRow = ({
   const path = `/projects/${project.slug}`;
 
   return (
-    <tr data-testid="project-card">
+    <tr data-testid="project-card" className="hover:bg-muted/50">
       <Cell className="w-[50px] p-4">
         <NextLink href={path}>
           <ProjectAvatar project={project} size={48} />

@@ -10,15 +10,16 @@ import {
 } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { CardHeader, StarIcon } from "@/components/core";
+import { CardHeader, StarIcon, TagIcon } from "@/components/core";
 import { SectionHeading } from "@/components/core/section";
 import { ExternalLink } from "@/components/core/typography";
 import {
   ProjectScore,
   ProjectTable,
 } from "@/components/project-list/project-table";
+import { CompactTagList } from "@/components/tag-list/compact-tag-list";
 
 import { searchClient } from "./backend";
 import {
@@ -27,7 +28,9 @@ import {
 } from "./backend-search-requests";
 
 export default async function IndexPage() {
-  const { hotProjects, newestProjects, bestOfJSProject } = await getData();
+  const { hotProjects, newestProjects, bestOfJSProject, popularTags } =
+    await getData();
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col items-start gap-2">
@@ -40,9 +43,16 @@ export default async function IndexPage() {
         </p>
       </div>
 
-      <HotProjectList projects={hotProjects} />
+      <div className="flex flex-col gap-4 lg:flex-row">
+        <div className="space-y-4">
+          <HotProjectList projects={hotProjects} />
 
-      <NewestProjectList projects={newestProjects} />
+          <NewestProjectList projects={newestProjects} />
+        </div>
+        <div className="min-w-[300px]">
+          <PopularTagsList tags={popularTags} />
+        </div>
+      </div>
 
       <Separator />
 
@@ -125,6 +135,29 @@ function NewestProjectList({ projects }: { projects: BestOfJS.Project[] }) {
           </NextLink>
         }
       />
+    </Card>
+  );
+}
+
+function PopularTagsList({ tags }: { tags: BestOfJS.Tag[] }) {
+  return (
+    <Card>
+      <CardHeader>
+        <SectionHeading icon={<TagIcon fontSize={32} />} title="Popular Tags" />
+      </CardHeader>
+      <CompactTagList tags={tags} />
+      <div className="border-t p-4">
+        <NextLink
+          href={`/tags`}
+          passHref
+          className={cn(
+            buttonVariants({ variant: "link" }),
+            "text-md w-full text-secondary-foreground"
+          )}
+        >
+          View all tags »
+        </NextLink>
+      </div>
     </Card>
   );
 }
@@ -213,5 +246,9 @@ async function getData() {
   const bestOfJSProject = await searchClient.findOne({
     full_name: "bestofjs/bestofjs-webui",
   });
-  return { hotProjects, newestProjects, bestOfJSProject };
+  const { tags: popularTags } = await searchClient.findTags({
+    sort: { counter: -1 },
+    limit: 10,
+  });
+  return { hotProjects, newestProjects, bestOfJSProject, popularTags };
 }
