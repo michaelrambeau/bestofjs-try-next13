@@ -1,3 +1,16 @@
+export function filterProjectsByTagsAndQuery<
+  T extends Omit<BestOfJS.SearchIndexProject, "slug">
+>(projects: T[], tags: string[], query: string) {
+  return filterProjectsByQuery(filterProjectsByTags(projects, tags), query);
+}
+
+export function filterProjectsByTags<
+  T extends Omit<BestOfJS.SearchIndexProject, "slug">
+>(projects: T[], tags: string[]) {
+  return projects.filter((project) =>
+    tags.every((tag) => project.tags.includes(tag))
+  );
+}
 // Used to filter projects when the user enters text in the search box
 // Search results are sorted by "relevance"
 export function filterProjectsByQuery<

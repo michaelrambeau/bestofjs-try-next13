@@ -10,7 +10,7 @@ type Props = {
 
 export const DownloadCount = ({ value }: Props) => {
   if (value === undefined) {
-    return <div className="star-delta text-small text-secondary">N/A</div>;
+    return <div className="star-delta text-sm">N/A</div>;
   }
 
   return <span>{numeral(value).format("a")}</span>;
@@ -52,13 +52,13 @@ export const StarDeltaAverage = ({ value }: Props) => {
   const sign = getSign(value);
 
   if (value === undefined)
-    return <div className="star-delta text-small text-secondary">N/A</div>;
+    return <div className="star-delta text-sm text-muted-foreground">N/A</div>;
 
   return (
     <div className="flex items-center">
       <span>{sign}</span>
       <span>{integerPart}</span>
-      <span className="text-secondary">.{decimalPart}</span>
+      <span>.{decimalPart}</span>
       <StarIcon />
       <span> /day</span>
     </div>

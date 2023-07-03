@@ -1,6 +1,7 @@
 import NextLink from "next/link";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/20/solid";
 
+import { cn } from "@/lib/utils";
 import { badgeVariants } from "@/components/ui/badge";
 import { TagIcon } from "@/components/core";
 import { PageHeading } from "@/components/core/typography";
@@ -77,6 +78,7 @@ export default async function Projects({ searchParams }: PageProps) {
         tags={selectedTags}
         buildPageURL={buildPageURL}
         allTags={allTags}
+        textQuery={searchState.query}
       />
       <RelevantTags tags={relevantTags} buildPageURL={buildPageURL} />
       <ProjectPaginatedList
@@ -148,6 +150,7 @@ function RelevantTags({
 }) {
   return (
     <div className="mb-4 flex flex-wrap gap-2">
+      <span>Refine your search:</span>
       {tags.map((tag) => {
         const url = buildPageURL((state) => ({
           ...state,
@@ -171,10 +174,12 @@ function RelevantTags({
 
 function CurrentTags({
   tags,
+  textQuery,
   buildPageURL,
   allTags,
 }: {
   tags: BestOfJS.Tag[];
+  textQuery: string;
   buildPageURL: SearchUrlBuilder<ProjectSearchQuery>;
   allTags: BestOfJS.Tag[];
 }) {
@@ -193,18 +198,28 @@ function CurrentTags({
           ...state,
           page: 1,
           tags: state.tags.filter((tagCode) => tagCode !== tag.code),
+          query: "",
         }));
         return (
           <NextLink
             key={tag.code}
             href={url}
-            className={badgeVariants({ variant: "default" })}
+            className={cn(badgeVariants({ variant: "default" }), "text-md")}
           >
             {tag.name}
             <XMarkIcon className="h-5 w-5" />
           </NextLink>
         );
       })}
+      {textQuery && (
+        <NextLink
+          href={buildPageURL((state) => ({ ...state, page: 1, query: "" }))}
+          className={cn(badgeVariants({ variant: "destructive" }), "text-md")}
+        >
+          {textQuery}
+          <XMarkIcon className="h-5 w-5" />
+        </NextLink>
+      )}
     </div>
   );
 }

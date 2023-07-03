@@ -2,9 +2,11 @@
 
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/20/solid";
 
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
   CommandEmpty,
@@ -17,8 +19,11 @@ import {
 } from "@/components/ui/command";
 
 import { ProjectAvatar, StarTotal, TagIcon } from "../core";
-import { Button } from "../ui/button";
-import { filterProjectsByQuery } from "./find-projects";
+import { useSearchState } from "../project-list/search-state";
+import {
+  filterProjectsByQuery,
+  filterProjectsByTagsAndQuery,
+} from "./find-projects";
 
 export type SearchProps = {
   allProjects: BestOfJS.SearchIndexProject[];
@@ -32,8 +37,34 @@ export type SearchResults = {
 
 export function SearchPalette({ allProjects, allTags }: SearchProps) {
   const router = useRouter();
+  const searchState = useSearchState();
+  const [currentTagCodes, setCurrentTagCodes] = React.useState<string[]>(
+    searchState.tags
+  );
+
+  // The search palette is mounted only once, we need to sync the tags when the URL changes
+  React.useEffect(() => {
+    setCurrentTagCodes(searchState.tags);
+  }, [JSON.stringify(searchState.tags)]);
+
+  const removeTag = (tagCode: string) =>
+    setCurrentTagCodes((state) => state.filter((tag) => tag !== tagCode));
+  const resetCurrentTags = () => setCurrentTagCodes(searchState.tags);
+
+  const currentTags = currentTagCodes.map((tagCode) =>
+    lookUpTag(tagCode, allTags)
+  );
   const [open, setOpen] = React.useState(false);
+
   const [searchQuery, setSearchQuery] = React.useState<string>("");
+
+  const onOpenChange = (value: boolean) => {
+    if (!value) {
+      resetCurrentTags();
+      setSearchQuery("");
+    }
+    setOpen(value);
+  };
 
   // const [searchResults, setSearchResults] = React.useState<SearchResults>({
   //   projects: [],
@@ -58,7 +89,7 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
   };
 
   const filteredProjects = searchQuery
-    ? filterProjectsByQuery(allProjects, searchQuery)
+    ? filterProjectsByTagsAndQuery(allProjects, currentTagCodes, searchQuery)
     : [];
 
   React.useEffect(() => {
@@ -107,50 +138,65 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
           <span className="text-xs">⌘</span>K
         </kbd>
       </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog open={open} onOpenChange={onOpenChange}>
         <CommandInput
           placeholder="Search projects"
           onValueChange={onValueChange}
         />
+        {currentTags.length > 0 && (
+          <div className="flex flex-wrap gap-2 border-b p-4">
+            {currentTags.map((tag) => {
+              if (!tag) return null;
+              return (
+                <Badge key={tag.code} onClick={() => removeTag(tag.code)}>
+                  {tag.name}
+                  <XMarkIcon className="h-5 w-5" />
+                </Badge>
+              );
+            })}
+          </div>
+        )}
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Projects">
-            {filteredProjects.slice(0, 10).map((project) => (
-              <CommandItem
-                key={project.slug}
-                value={project.slug}
-                onSelect={onSelectProject}
-              >
-                <div className="grid w-full grid-cols-[32px_1fr_100px] items-center gap-4">
-                  <div className="items-center justify-center">
-                    <ProjectAvatar project={project} size={32} />
+          {searchQuery.length > 0 && (
+            <CommandGroup heading="Projects">
+              {filteredProjects.slice(0, 10).map((project) => (
+                <CommandItem
+                  key={project.slug}
+                  value={project.slug}
+                  onSelect={onSelectProject}
+                >
+                  <div className="grid w-full grid-cols-[32px_1fr_100px] items-center gap-4">
+                    <div className="items-center justify-center">
+                      <ProjectAvatar project={project} size={32} />
+                    </div>
+                    <div className="">{project.name}</div>
+                    <div className="text-right">
+                      <StarTotal value={project.stars} />
+                    </div>
                   </div>
-                  <div className="">{project.name}</div>
-                  <div className="text-right">
-                    <StarTotal value={project.stars} />
+                </CommandItem>
+              ))}
+              {searchQuery.length > 2 && (
+                <CommandItem
+                  onSelect={onSelectSearchForText}
+                  value={`search/${searchQuery}`}
+                  className="grid w-full grid-cols-[32px_1fr] items-center gap-4"
+                >
+                  <div className="flex justify-center">
+                    <MagnifyingGlassIcon className="" />
                   </div>
-                </div>
-              </CommandItem>
-            ))}
-            {searchQuery.length > 2 && (
-              <CommandItem
-                onSelect={onSelectSearchForText}
-                value={`search/${searchQuery}`}
-                className="grid w-full grid-cols-[32px_1fr] items-center gap-4"
-              >
-                <div className="flex justify-center">
-                  <MagnifyingGlassIcon className="" />
-                </div>
-                <div>
-                  Search for
-                  <span className="ml-1 font-bold italic">{searchQuery}</span>
-                </div>
-              </CommandItem>
-            )}
-          </CommandGroup>
+                  <div>
+                    Search for
+                    <span className="ml-1 font-bold italic">{searchQuery}</span>
+                  </div>
+                </CommandItem>
+              )}
+            </CommandGroup>
+          )}
           <CommandGroup heading="Tags">
             {filteredTags.length > 0 ? (
-              filteredTags.slice(0, 10).map((tag) => (
+              filteredTags.slice(0, 20).map((tag) => (
                 <CommandItem
                   key={tag.code}
                   value={tag.code}
@@ -161,7 +207,9 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
                       <TagIcon />
                     </div>
                     <span className="">{tag.name}</span>
-                    <div className="text-right">{tag.counter} projects</div>
+                    <div className="text-right text-muted-foreground">
+                      {tag.counter}
+                    </div>
                   </div>
                 </CommandItem>
               ))
@@ -195,4 +243,8 @@ function filterTagsByQuery(tags: BestOfJS.Tag[], searchQuery: string) {
       tag.code.includes(searchQuery) ||
       tag.name.toLowerCase().includes(searchQuery)
   );
+}
+
+function lookUpTag(tagCode: string, allTags: BestOfJS.Tag[]) {
+  return allTags.find((tag) => tag.code === tagCode);
 }

@@ -1,10 +1,10 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import {
-  parseSearchParams,
   ProjectPageSearchParams,
+  parseSearchParams,
 } from "../project-list/navigation-state";
 
 export function useSearchState() {
