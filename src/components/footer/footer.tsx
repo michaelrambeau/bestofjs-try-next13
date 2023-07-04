@@ -17,19 +17,19 @@ export const Footer = () => {
             />
           </div>
           <div className="grid gap-2">
-            <div className="footer-title">Direct links</div>
-            <NextLink href="/projects" className="link link-hover">
+            <div className="text-muted-foreground">Direct links</div>
+            <NextLink href="/projects" className="hover:underline">
               Projects
             </NextLink>
-            <NextLink href="/tags" className="link link-hover">
+            <NextLink href="/tags" className="hover:underline">
               Tags
             </NextLink>
           </div>
           <div className="grid gap-2">
-            <div className="footer-title">Related projects</div>
+            <div className="text-muted-foreground">Related projects</div>
             <a
               href={RISING_STARS_URL}
-              className="link link-hover"
+              className="hover:underline"
               target="_blank"
               rel="noreferrer"
             >
@@ -37,7 +37,7 @@ export const Footer = () => {
             </a>
             <a
               href={STATE_OF_JS_URL}
-              className="link link-hover"
+              className="hover:underline"
               target="_blank"
               rel="noreferrer"
             >

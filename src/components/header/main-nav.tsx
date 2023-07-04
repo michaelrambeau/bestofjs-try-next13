@@ -45,10 +45,9 @@ export function MainNav() {
   const pathname = usePathname();
 
   return (
-    <div className="flex gap-6 md:gap-10">
+    <div className="flex gap-6 md:gap-8">
       <Link href="/" className="flex items-center space-x-2">
-        <Icons.logo className="h-6 w-6" />
-        <span className="inline-block font-bold">{siteConfig.name}</span>
+        <Icons.logo className="h-[37.15px] w-[130px] text-orange-600 dark:text-yellow-400" />
       </Link>
       {mainNavItems?.length ? (
         <nav className="flex gap-6">

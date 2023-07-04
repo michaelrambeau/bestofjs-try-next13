@@ -38,13 +38,13 @@ export default async function IndexPage() {
           The best of JS and friends
         </h1>
         <p className="max-w-[700px] text-lg text-muted-foreground">
-          A place to find the best open source related to the web platform: JS,
-          TypeScript, CSS, Node.js, Deno, Bun...
+          A place to find the best open source projects related to the web
+          platform: JS, HTML, CSS, but also TypeScript, Node.js, Deno, Bun...
         </p>
       </div>
 
       <div className="flex flex-col gap-4 lg:flex-row">
-        <div className="space-y-4">
+        <div className="grow space-y-4">
           <HotProjectList projects={hotProjects} />
 
           <NewestProjectList projects={newestProjects} />
