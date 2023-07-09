@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/20/solid";
 
 import { cn } from "@/lib/utils";
@@ -20,10 +20,7 @@ import {
 
 import { ProjectAvatar, StarTotal, TagIcon } from "../core";
 import { useSearchState } from "../project-list/search-state";
-import {
-  filterProjectsByQuery,
-  filterProjectsByTagsAndQuery,
-} from "./find-projects";
+import { filterProjectsByTagsAndQuery } from "./find-projects";
 
 export type SearchProps = {
   allProjects: BestOfJS.SearchIndexProject[];

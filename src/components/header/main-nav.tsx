@@ -6,7 +6,6 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 
@@ -47,7 +46,11 @@ export function MainNav() {
   return (
     <div className="flex gap-6 md:gap-8">
       <Link href="/" className="flex items-center space-x-2">
-        <Icons.logo className="h-[37.15px] w-[130px] text-orange-600 dark:text-yellow-400" />
+        <Icons.logo
+          width={130}
+          height={37.15}
+          className="h-[37.15px] w-[130px] text-orange-600 dark:text-yellow-400"
+        />
       </Link>
       {mainNavItems?.length ? (
         <nav className="flex gap-6">

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
@@ -13,8 +14,20 @@ export function SiteHeader() {
       <div className="app-container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <MainNav />
         <div className="flex flex-1 items-center justify-end space-x-4">
-          {/* @ts-expect-error Server Component */}
-          <SearchContainer />
+          {/*
+          Suspense block needed to avoid the "deopted into client-side rendering"
+          https://nextjs.org/docs/messages/deopted-into-client-rendering
+          */}
+          <Suspense
+            fallback={
+              <div className="text-sm text-muted-foreground">
+                Loading search...
+              </div>
+            }
+          >
+            {/* @ts-expect-error Server Component */}
+            <SearchContainer />
+          </Suspense>
           <nav className="flex items-center space-x-1">
             <Link
               href={siteConfig.links.github}
@@ -27,7 +40,7 @@ export function SiteHeader() {
                   variant: "ghost",
                 })}
               >
-                <Icons.gitHub className="h-5 w-5" />
+                <Icons.gitHub className="h-5 w-5" width={20} height={20} />
                 <span className="sr-only">GitHub</span>
               </div>
             </Link>
