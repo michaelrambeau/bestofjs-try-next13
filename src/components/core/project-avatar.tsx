@@ -1,11 +1,18 @@
+"use client";
+
+import { useTheme } from "next-themes";
+
 type Props = {
   project: Pick<BestOfJS.Project, "name" | "owner_id" | "icon">;
   size: number;
 };
 export const ProjectAvatar = ({ project, size = 100 }: Props) => {
-  // const { colorMode } = useColorMode();
-  const colorMode = "dark";
-  const { src, srcSet } = getProjectImageProps({ project, size, colorMode });
+  const { theme } = useTheme();
+  const { src, srcSet } = getProjectImageProps({
+    project,
+    size,
+    colorMode: (theme || "dark") as "dark" | "light",
+  });
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
