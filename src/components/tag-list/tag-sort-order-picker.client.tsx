@@ -24,8 +24,6 @@ type Props = {
   searchState: TagSearchQuery;
 };
 export const TagSortOrderPicker = ({ value, searchState }: Props) => {
-  console.log({ value });
-
   const currentOption = tagListSortOptions.find(
     (option) => option.value === value
   );
@@ -59,15 +57,4 @@ export const TagSortOrderPicker = ({ value, searchState }: Props) => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-
-  // return (
-  //   <DropdownMenu menu={menu} left={0} right={"inherit"}>
-  //     <button className="btn btn-outline gap-2">
-  //       <>
-  //         Sort: {currentOption?.text || ""}
-  //         <ChevronDownIcon className="h-6 w-6" aria-hidden="true" />
-  //       </>
-  //     </button>
-  //   </DropdownMenu>
-  // );
 };

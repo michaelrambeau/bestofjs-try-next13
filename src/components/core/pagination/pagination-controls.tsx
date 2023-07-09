@@ -27,7 +27,7 @@ export const TopPaginationControls = <T extends PaginationProps>(
 
   return (
     <div className="flex items-center">
-      <div className="mr-4 text-sm">
+      <div className="text-sm">
         Showing{" "}
         {from === to ? (
           `#${from}`

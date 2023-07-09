@@ -1,23 +1,33 @@
 import NextLink from "next/link";
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
 
+import { cn } from "@/lib/utils";
+import { linkVariants } from "@/components/ui/link";
 import { ProjectAvatar } from "@/components/core";
+
+import { buttonVariants } from "../ui/button";
 
 type Props = {
   tags: BestOfJS.TagWithProjects[];
 };
 export const TagList = ({ tags }: Props) => {
   return (
-    <div className="divide-y divide-dashed rounded-lg border">
+    <div className="divide-y divide-dashed rounded-lg">
       {tags.map((tag) => (
-        <div key={tag.code} className="flex w-full justify-between">
+        <div
+          key={tag.code}
+          className="flex w-full justify-between hover:bg-muted/50"
+        >
           <div className="p-4">
             <NextLink
               href={`/projects?tags=${tag.code}`}
-              className="text-orange-700 hover:text-orange-800 hover:underline dark:text-orange-300 dark:hover:text-orange-200"
+              className="text-secondary-foreground hover:underline"
             >
               {tag.name}
             </NextLink>
-            <span className="ml-2">({tag.counter} projects)</span>
+            <span className="ml-2 text-muted-foreground">
+              {tag.counter} projects
+            </span>
           </div>
           <div className="flex items-center gap-4 px-4">
             {tag.projects.map((project) => (
@@ -29,6 +39,15 @@ export const TagList = ({ tags }: Props) => {
                 <ProjectAvatar project={project} size={32} />
               </NextLink>
             ))}
+            <NextLink
+              href={`/projects?tags=${tag.code}`}
+              className={cn(
+                buttonVariants({ size: "icon", variant: "outline" }),
+                "h-[32px] w-[32px]"
+              )}
+            >
+              <ChevronRightIcon className="h-6 w-6" />
+            </NextLink>
           </div>
         </div>
       ))}

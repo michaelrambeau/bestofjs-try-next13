@@ -1,8 +1,13 @@
 import { SearchQueryUpdater } from "@/app/projects/types";
 import { TagSearchQuery } from "@/app/tags/tag-list-shared";
 
-import { TopPaginationControls } from "../core/pagination/pagination-controls";
+import { CardHeader } from "../core";
+import {
+  BottomPaginationControls,
+  TopPaginationControls,
+} from "../core/pagination/pagination-controls";
 import { computePaginationState } from "../core/pagination/pagination-state";
+import { Card } from "../ui/card";
 import { TagList } from "./tag-list";
 import { TagSortOrderPicker } from "./tag-sort-order-picker.client";
 
@@ -32,20 +37,28 @@ export const TagPaginatedList = ({
   });
 
   return (
-    <>
-      <div className="mb-4 flex justify-between">
-        <TagSortOrderPicker
-          value={searchState.sortOptionId}
-          searchState={searchState}
-        />
-        {showPagination && (
-          <TopPaginationControls
-            paginationState={paginationState}
-            buildPageURL={buildTagsPageURL}
+    <Card>
+      <CardHeader>
+        <div className="flex justify-between">
+          <TagSortOrderPicker
+            value={searchState.sortOptionId}
+            searchState={searchState}
           />
-        )}
-      </div>
+          {showPagination && (
+            <TopPaginationControls
+              paginationState={paginationState}
+              buildPageURL={buildTagsPageURL}
+            />
+          )}
+        </div>
+      </CardHeader>
       <TagList tags={tags} />
-    </>
+      <div className="flex justify-end border-t p-4">
+        <BottomPaginationControls
+          paginationState={paginationState}
+          buildPageURL={buildTagsPageURL}
+        />
+      </div>
+    </Card>
   );
 };

@@ -54,8 +54,6 @@ export const ProjectHeader = ({ project }: Props) => {
   );
 };
 
-console.log(cn(buttonVariants({ variant: "outline" }), "relative"));
-
 const ButtonLink = ({
   href,
   icon,
