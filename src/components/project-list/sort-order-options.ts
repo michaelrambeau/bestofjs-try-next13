@@ -57,19 +57,21 @@ export const sortOrderOptions: SortOption[] = [
     label: "By date of the latest commit",
     sort: { pushed_at: -1 },
   },
-  // {
-  //   key: "contributors",
-  //   label: "By number of contributors",
-  // },
-  // {
-  //   key: "created",
-  //   label: "By date of creation (Oldest first)",
-  //   direction: "asc",
-  // },
-  // {
-  //   key: "newest",
-  //   label: "By date of addition on Best of JS",
-  // },
+  {
+    key: "contributors",
+    label: "By number of contributors",
+    sort: { contributor_count: -1 },
+  },
+  {
+    key: "created",
+    label: "By date of creation (Oldest first)",
+    sort: { created_at: -1 },
+  },
+  {
+    key: "newest",
+    label: "By date of addition on Best of JS",
+    sort: {},
+  },
   // {
   //   key: "bookmark",
   //   label: "By date of the bookmark",

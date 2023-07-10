@@ -30,7 +30,8 @@ import {
 // needed when running the built app (`start` command)
 // otherwise Next.js always renders the same page, ignoring the query string parameters!
 // export const revalidate = 0;
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
+// Last Update: not needed with 13.4.9
 
 type ProjectsPageData = {
   projects: BestOfJS.Project[];
