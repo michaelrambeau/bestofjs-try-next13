@@ -17,7 +17,7 @@ import {
 import { MonthlyTrendsChart } from "./monthly-trends-chart";
 
 type Props = {
-  project: BestOfJS.Project;
+  project: BestOfJS.ProjectDetails;
 };
 export const ProjectDetailsGitHubCard = ({ project }: Props) => {
   const { stars } = project;
@@ -34,40 +34,19 @@ export const ProjectDetailsGitHubCard = ({ project }: Props) => {
         </div>
       </CardHeader>
       <CardBody>
-        {/* @ts-expect-error Server Component */}
-        <GitHubCardBody project={project} />
+        <CardSection>
+          <GitHubData project={project} />
+        </CardSection>
+        <CardSection>
+          <GitHubMonthlyTrends project={project} />
+        </CardSection>
+        <CardSection>
+          <GitHubTrendsSummary project={project} />
+        </CardSection>
       </CardBody>
     </Card>
   );
 };
-
-async function GitHubCardBody({ project }: Props) {
-  const projectWithDetails = await getProjectDetails(project);
-
-  return (
-    <>
-      <CardSection>
-        <GitHubData project={projectWithDetails} />
-      </CardSection>
-      <CardSection>
-        <GitHubMonthlyTrends project={projectWithDetails} />
-      </CardSection>
-      <CardSection>
-        <GitHubTrendsSummary project={projectWithDetails} />
-      </CardSection>
-    </>
-  );
-}
-
-async function getProjectDetails(project: BestOfJS.Project) {
-  const details = await fetchProjectDetailsData(project.full_name);
-  return mergeProjectData(project, details);
-}
-
-async function fetchProjectDetailsData(fullName: string) {
-  const url = `https://bestofjs-serverless.vercel.app/api/project-details?fullName=${fullName}`;
-  return fetch(url).then((r) => r.json());
-}
 
 const GitHubData = ({ project }: { project: BestOfJS.ProjectDetails }) => {
   const {
@@ -109,29 +88,6 @@ const GitHubData = ({ project }: { project: BestOfJS.ProjectDetails }) => {
 };
 
 const formatNumber = (number: number) => numeral(number).format("0,0");
-
-function mergeProjectData(project: BestOfJS.Project, details: any) {
-  const {
-    npm,
-    bundle,
-    packageSize,
-    description,
-    github: { contributor_count, commit_count, created_at },
-    timeSeries,
-  } = details;
-
-  return {
-    ...project,
-    description,
-    timeSeries,
-    commit_count,
-    contributor_count,
-    created_at,
-    npm,
-    bundle,
-    packageSize,
-  } as BestOfJS.ProjectDetails;
-}
 
 export const GitHubMonthlyTrends = ({
   project,
