@@ -20,7 +20,7 @@ type Props = {
   project: BestOfJS.ProjectDetails;
 };
 export const ProjectDetailsGitHubCard = ({ project }: Props) => {
-  const { stars } = project;
+  const { stars, timeSeries } = project;
 
   return (
     <Card>
@@ -37,9 +37,11 @@ export const ProjectDetailsGitHubCard = ({ project }: Props) => {
         <CardSection>
           <GitHubData project={project} />
         </CardSection>
-        <CardSection>
-          <GitHubMonthlyTrends project={project} />
-        </CardSection>
+        {timeSeries?.monthly?.length > 1 && (
+          <CardSection>
+            <GitHubMonthlyTrends project={project} />
+          </CardSection>
+        )}
         <CardSection>
           <GitHubTrendsSummary project={project} />
         </CardSection>
@@ -60,7 +62,12 @@ const GitHubData = ({ project }: { project: BestOfJS.ProjectDetails }) => {
   return (
     <div className="grid grid-cols-2 gap-4">
       <div>
-        <a href={repository} target="_blank" rel="noreferrer">
+        <a
+          href={repository}
+          target="_blank"
+          rel="noreferrer"
+          className="font-mono hover:underline"
+        >
           {full_name}
         </a>
       </div>

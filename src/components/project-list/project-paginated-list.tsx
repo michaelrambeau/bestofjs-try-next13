@@ -37,6 +37,14 @@ export const ProjectPaginatedList = ({
     limit,
   });
 
+  if (total === 0) {
+    return (
+      <Card className="flex items-center justify-center py-8">
+        No projects found
+      </Card>
+    );
+  }
+
   return (
     <Card>
       {(showSortOptions || showPagination) && (

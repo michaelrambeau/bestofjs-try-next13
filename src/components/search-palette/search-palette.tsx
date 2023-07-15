@@ -14,11 +14,10 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
-  CommandShortcut,
 } from "@/components/ui/command";
 
 import { ProjectAvatar, StarTotal, TagIcon } from "../core";
+import { stateToQueryString } from "../project-list/navigation-state";
 import { useSearchState } from "../project-list/search-state";
 import { filterProjectsByTagsAndQuery } from "./find-projects";
 
@@ -65,11 +64,6 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
     setOpen(value);
   };
 
-  // const [searchResults, setSearchResults] = React.useState<SearchResults>({
-  //   projects: [],
-  //   tags: [], //relevantTags.slice(0, 20),
-  // });
-
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && e.metaKey) {
@@ -83,7 +77,6 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
   }, []);
 
   const onValueChange = (value: string) => {
-    // setSearchQuery({ projects, tags: [] });
     setSearchQuery(value);
   };
 
@@ -98,18 +91,22 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
     router.prefetch(`/projects/${firstProject.slug}`);
   }, [searchQuery, filteredProjects.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const popularTags = allTags.slice(0, 10);
+  const popularTags = allTags.slice(0, 20);
 
   const filteredTags = searchQuery
     ? filterTagsByQuery(allTags, searchQuery)
     : popularTags;
 
-  const onSelectProject = (slug: string) => {
-    goToURL(`/projects/${slug}`);
+  const onSelectProject = (itemValue: string) => {
+    const projectSlug = itemValue.slice("project/".length);
+    goToURL(`/projects/${projectSlug}`);
   };
 
-  const onSelectTag = (tagCode: string) => {
-    goToURL(`/projects?tags=${tagCode}`);
+  const onSelectTag = (itemValue: string) => {
+    const tagCode = itemValue.slice("tag/".length);
+    const nextState = { ...searchState, tags: [...searchState.tags, tagCode] };
+    const qs = stateToQueryString(nextState);
+    goToURL(`/projects/?${qs}`);
   };
 
   const onSelectSearchForText = () => {
@@ -120,8 +117,11 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
     // only close the popup when the page is ready to show
     // otherwise the popup closes showing the previous page, before going to the page!
     startTransition(() => {
+      // oddly `onOpenChange` is not triggered when calling moving to another page, so we "reset" the state before closing
+      resetCurrentTags();
+      setSearchQuery("");
       setOpen(false);
-      router.push(url, {});
+      router.push(url);
     });
   };
 
@@ -148,7 +148,7 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
         ) : (
           <>
             <CommandInput
-              placeholder="Search projects"
+              placeholder="Search projects and tags"
               onValueChange={onValueChange}
             />
             {currentTags.length > 0 && (
@@ -171,7 +171,7 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
                   {filteredProjects.slice(0, 10).map((project) => (
                     <CommandItem
                       key={project.slug}
-                      value={project.slug}
+                      value={`project/` + project.slug}
                       onSelect={onSelectProject}
                     >
                       <div className="grid w-full grid-cols-[32px_1fr_100px] items-center gap-4">
@@ -209,7 +209,7 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
                   filteredTags.slice(0, 20).map((tag) => (
                     <CommandItem
                       key={tag.code}
-                      value={tag.code}
+                      value={"tag/" + tag.code}
                       onSelect={onSelectTag}
                     >
                       <div className="grid w-full grid-cols-[32px_1fr_100px] items-center gap-4">

@@ -81,7 +81,9 @@ export default async function Projects({ searchParams }: PageProps) {
         allTags={allTags}
         textQuery={searchState.query}
       />
-      <RelevantTags tags={relevantTags} buildPageURL={buildPageURL} />
+      {relevantTags.length > 0 && (
+        <RelevantTags tags={relevantTags} buildPageURL={buildPageURL} />
+      )}
       <ProjectPaginatedList
         projects={projects}
         page={page}
@@ -217,7 +219,7 @@ function CurrentTags({
           href={buildPageURL((state) => ({ ...state, page: 1, query: "" }))}
           className={cn(badgeVariants({ variant: "destructive" }), "text-md")}
         >
-          {textQuery}
+          “{textQuery}”
           <XMarkIcon className="h-5 w-5" />
         </NextLink>
       )}
