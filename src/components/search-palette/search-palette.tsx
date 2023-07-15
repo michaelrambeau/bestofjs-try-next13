@@ -35,6 +35,8 @@ export type SearchResults = {
 export function SearchPalette({ allProjects, allTags }: SearchProps) {
   const router = useRouter();
   const searchState = useSearchState();
+  const [isPending, startTransition] = React.useTransition();
+
   const [currentTagCodes, setCurrentTagCodes] = React.useState<string[]>(
     searchState.tags
   );
@@ -103,21 +105,24 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
     : popularTags;
 
   const onSelectProject = (slug: string) => {
-    const url = `/projects/${slug}`;
-    setOpen(false);
-    router.push(url);
+    goToURL(`/projects/${slug}`);
   };
 
   const onSelectTag = (tagCode: string) => {
-    const url = `/projects?tags=${tagCode}`;
-    setOpen(false);
-    router.push(url);
+    goToURL(`/projects?tags=${tagCode}`);
   };
 
   const onSelectSearchForText = () => {
-    const url = `/projects?query=${searchQuery}`;
-    setOpen(false);
-    router.push(url);
+    goToURL(`/projects?query=${searchQuery}`);
+  };
+
+  const goToURL = (url: string) => {
+    // only close the popup when the page is ready to show
+    // otherwise the popup closes showing the previous page, before going to the page!
+    startTransition(() => {
+      setOpen(false);
+      router.push(url, {});
+    });
   };
 
   return (
@@ -136,99 +141,95 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={onOpenChange}>
-        <CommandInput
-          placeholder="Search projects"
-          onValueChange={onValueChange}
-        />
-        {currentTags.length > 0 && (
-          <div className="flex flex-wrap gap-2 border-b p-4">
-            {currentTags.map((tag) => {
-              if (!tag) return null;
-              return (
-                <Badge key={tag.code} onClick={() => removeTag(tag.code)}>
-                  {tag.name}
-                  <XMarkIcon className="h-5 w-5" />
-                </Badge>
-              );
-            })}
+        {isPending ? (
+          <div className="flex h-[300px] items-center justify-center">
+            Loading...
           </div>
-        )}
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          {searchQuery.length > 0 && (
-            <CommandGroup heading="Projects">
-              {filteredProjects.slice(0, 10).map((project) => (
-                <CommandItem
-                  key={project.slug}
-                  value={project.slug}
-                  onSelect={onSelectProject}
-                >
-                  <div className="grid w-full grid-cols-[32px_1fr_100px] items-center gap-4">
-                    <div className="items-center justify-center">
-                      <ProjectAvatar project={project} size={32} />
-                    </div>
-                    <div className="">{project.name}</div>
-                    <div className="text-right">
-                      <StarTotal value={project.stars} />
-                    </div>
-                  </div>
-                </CommandItem>
-              ))}
-              {searchQuery.length > 2 && (
-                <CommandItem
-                  onSelect={onSelectSearchForText}
-                  value={`search/${searchQuery}`}
-                  className="grid w-full grid-cols-[32px_1fr] items-center gap-4"
-                >
-                  <div className="flex justify-center">
-                    <MagnifyingGlassIcon className="" />
-                  </div>
-                  <div>
-                    Search for
-                    <span className="ml-1 font-bold italic">{searchQuery}</span>
-                  </div>
-                </CommandItem>
-              )}
-            </CommandGroup>
-          )}
-          <CommandGroup heading="Tags">
-            {filteredTags.length > 0 ? (
-              filteredTags.slice(0, 20).map((tag) => (
-                <CommandItem
-                  key={tag.code}
-                  value={tag.code}
-                  onSelect={onSelectTag}
-                >
-                  <div className="grid w-full grid-cols-[32px_1fr_100px] items-center gap-4">
-                    <div className="flex w-full items-center justify-center">
-                      <TagIcon />
-                    </div>
-                    <span className="">{tag.name}</span>
-                    <div className="text-right text-muted-foreground">
-                      {tag.counter}
-                    </div>
-                  </div>
-                </CommandItem>
-              ))
-            ) : (
-              <div className="py-6 text-center text-sm">No tag found</div>
+        ) : (
+          <>
+            <CommandInput
+              placeholder="Search projects"
+              onValueChange={onValueChange}
+            />
+            {currentTags.length > 0 && (
+              <div className="flex flex-wrap gap-2 border-b p-4">
+                {currentTags.map((tag) => {
+                  if (!tag) return null;
+                  return (
+                    <Badge key={tag.code} onClick={() => removeTag(tag.code)}>
+                      {tag.name}
+                      <XMarkIcon className="h-5 w-5" />
+                    </Badge>
+                  );
+                })}
+              </div>
             )}
-          </CommandGroup>
-          {/* <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <Calendar className="mr-2 h-4 w-4" />
-              <span>Calendar</span>
-            </CommandItem>
-            <CommandItem>
-              <Smile className="mr-2 h-4 w-4" />
-              <span>Search Emoji</span>
-            </CommandItem>
-            <CommandItem>
-              <Calculator className="mr-2 h-4 w-4" />
-              <span>Calculator</span>
-            </CommandItem>
-          </CommandGroup> */}
-        </CommandList>
+            <CommandList>
+              <CommandEmpty>No results found.</CommandEmpty>
+              {searchQuery.length > 0 && (
+                <CommandGroup heading="Projects">
+                  {filteredProjects.slice(0, 10).map((project) => (
+                    <CommandItem
+                      key={project.slug}
+                      value={project.slug}
+                      onSelect={onSelectProject}
+                    >
+                      <div className="grid w-full grid-cols-[32px_1fr_100px] items-center gap-4">
+                        <div className="items-center justify-center">
+                          <ProjectAvatar project={project} size={32} />
+                        </div>
+                        <div className="">{project.name}</div>
+                        <div className="text-right">
+                          <StarTotal value={project.stars} />
+                        </div>
+                      </div>
+                    </CommandItem>
+                  ))}
+                  {searchQuery.length > 2 && (
+                    <CommandItem
+                      onSelect={onSelectSearchForText}
+                      value={`search/${searchQuery}`}
+                      className="grid w-full grid-cols-[32px_1fr] items-center gap-4"
+                    >
+                      <div className="flex justify-center">
+                        <MagnifyingGlassIcon className="" />
+                      </div>
+                      <div>
+                        Search for
+                        <span className="ml-1 font-bold italic">
+                          {searchQuery}
+                        </span>
+                      </div>
+                    </CommandItem>
+                  )}
+                </CommandGroup>
+              )}
+              <CommandGroup heading="Tags">
+                {filteredTags.length > 0 ? (
+                  filteredTags.slice(0, 20).map((tag) => (
+                    <CommandItem
+                      key={tag.code}
+                      value={tag.code}
+                      onSelect={onSelectTag}
+                    >
+                      <div className="grid w-full grid-cols-[32px_1fr_100px] items-center gap-4">
+                        <div className="flex w-full items-center justify-center">
+                          <TagIcon />
+                        </div>
+                        <span className="">{tag.name}</span>
+                        <div className="text-right text-muted-foreground">
+                          {tag.counter}
+                        </div>
+                      </div>
+                    </CommandItem>
+                  ))
+                ) : (
+                  <div className="py-6 text-center text-sm">No tag found</div>
+                )}
+              </CommandGroup>
+            </CommandList>
+          </>
+        )}
       </CommandDialog>
     </>
   );
