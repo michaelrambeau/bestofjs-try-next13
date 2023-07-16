@@ -28,7 +28,7 @@ export const ProjectTable = ({ projects, footer, ...otherProps }: Props) => {
   return (
     <div className="table-container">
       <table className="w-full">
-        <tbody className="">
+        <tbody className="[&_tr:last-child]:border-0">
           {projects.map((project) => {
             if (!project) return null;
             return (
@@ -41,7 +41,7 @@ export const ProjectTable = ({ projects, footer, ...otherProps }: Props) => {
           })}
         </tbody>
         {footer && (
-          <tfoot className="">
+          <tfoot className="border-t">
             <tr>
               <Cell colSpan={5} className="border-0 p-4 text-center">
                 {footer}
@@ -66,7 +66,7 @@ const ProjectTableRow = ({
   const path = `/projects/${project.slug}`;
 
   return (
-    <tr data-testid="project-card" className="hover:bg-muted/50">
+    <tr data-testid="project-card" className="border-b hover:bg-muted/50">
       <Cell className="w-[50px] p-4">
         <NextLink href={path}>
           <ProjectAvatar project={project} size={48} />
@@ -169,7 +169,7 @@ export const ProjectScore = ({
 };
 
 const Cell = ({ className, ...props }: { className: string } & any) => (
-  <td className={cn(`border-b`, className)} {...props} />
+  <td className={cn(className)} {...props} />
 );
 
 const formatNumber = (number: number) => numeral(number).format("a");

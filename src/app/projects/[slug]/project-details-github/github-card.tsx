@@ -27,7 +27,7 @@ export const ProjectDetailsGitHubCard = ({ project }: Props) => {
       <CardHeader>
         <div className="flex items-center space-x-2">
           <div>
-            <GoMarkGithub size={24} />
+            <GoMarkGithub size={20} />
           </div>
           <div>GitHub</div>
           <StarTotal value={stars} />

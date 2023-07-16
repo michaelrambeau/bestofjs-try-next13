@@ -1,7 +1,7 @@
 import React from "react";
 import formatUrl from "@/helpers/url";
-import { DiNpm } from "react-icons/di";
 import { GoHome, GoMarkGithub } from "react-icons/go";
+import { ImNpm } from "react-icons/im";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -38,13 +38,7 @@ export const ProjectHeader = ({ project }: Props) => {
         {packageName && (
           <ButtonLink
             href={`https://www.npmjs.com/package/${packageName}`}
-            icon={
-              <DiNpm
-                size={28}
-                className="icon"
-                style={{ transform: "translateY(2px)" }}
-              />
-            }
+            icon={<ImNpm className="text-[20px]" />}
           >
             {packageName}
           </ButtonLink>

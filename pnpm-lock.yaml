@@ -4,6 +4,7 @@ specifiers:
   '@headlessui/react': ^1.7.15
   '@heroicons/react': ^2.0.18
   '@ianvs/prettier-plugin-sort-imports': ^3.7.2
+  '@radix-ui/react-collapsible': ^1.0.3
   '@radix-ui/react-dialog': ^1.0.4
   '@radix-ui/react-dropdown-menu': ^2.0.5
   '@radix-ui/react-popover': ^1.0.6
@@ -50,6 +51,7 @@ specifiers:
 dependencies:
   '@headlessui/react': 1.7.15_biqbaboplfbrettd7655fr4n2y
   '@heroicons/react': 2.0.18_react@18.2.0
+  '@radix-ui/react-collapsible': 1.0.3_2ejdisobb7q4dn5gvncpcai4wu
   '@radix-ui/react-dialog': 1.0.4_2ejdisobb7q4dn5gvncpcai4wu
   '@radix-ui/react-dropdown-menu': 2.0.5_2ejdisobb7q4dn5gvncpcai4wu
   '@radix-ui/react-popover': 1.0.6_2ejdisobb7q4dn5gvncpcai4wu
@@ -607,6 +609,34 @@ packages:
     dependencies:
       '@babel/runtime': 7.22.5
       '@radix-ui/react-primitive': 1.0.3_2ejdisobb7q4dn5gvncpcai4wu
+      '@types/react': 18.2.9
+      '@types/react-dom': 18.2.4
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@radix-ui/react-collapsible/1.0.3_2ejdisobb7q4dn5gvncpcai4wu:
+    resolution: {integrity: sha512-UBmVDkmR6IvDsloHVN+3rtx4Mi5TFvylYXpluuv0f37dtaz3H99bp8No0LGXRigVpl3UAT4l9j6bIchh42S/Gg==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.5
+      '@radix-ui/primitive': 1.0.1
+      '@radix-ui/react-compose-refs': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-context': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-id': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-presence': 1.0.1_2ejdisobb7q4dn5gvncpcai4wu
+      '@radix-ui/react-primitive': 1.0.3_2ejdisobb7q4dn5gvncpcai4wu
+      '@radix-ui/react-use-controllable-state': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
+      '@radix-ui/react-use-layout-effect': 1.0.1_xomkljxbsahfbuzbqqeyw47ndm
       '@types/react': 18.2.9
       '@types/react-dom': 18.2.4
       react: 18.2.0

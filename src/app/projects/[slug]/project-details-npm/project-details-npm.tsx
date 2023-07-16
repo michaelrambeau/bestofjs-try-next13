@@ -1,9 +1,10 @@
-import { IoLogoNpm } from "react-icons/io";
+import { ImNpm } from "react-icons/im";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CardBody, CardSection } from "@/components/core";
 
+import { DependenciesSection } from "./dependencies-section";
 import { MonthlyDownloadsChart } from "./monthly-downloads-charts";
 
 export function ProjectDetailsNpmCard({
@@ -14,9 +15,9 @@ export function ProjectDetailsNpmCard({
   const { packageName, npm } = project;
   return (
     <Card>
-      <CardHeader className="border-b py-2">
+      <CardHeader className="border-b">
         <div className="flex items-center gap-2">
-          <IoLogoNpm className="translate-y-1 text-[44px] text-red-500" />
+          <ImNpm className="" />
           Package on NPM
         </div>
       </CardHeader>
@@ -36,6 +37,10 @@ export function ProjectDetailsNpmCard({
         <CardSection>
           {/* @ts-expect-error Server Component */}
           <MonthlyDownloadsChart project={project} />
+        </CardSection>
+        <CardSection>
+          {/* @ts-expect-error Server Component */}
+          <DependenciesSection project={project} />
         </CardSection>
       </CardBody>
     </Card>
