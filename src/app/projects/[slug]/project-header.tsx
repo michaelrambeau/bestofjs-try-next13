@@ -65,7 +65,11 @@ const ButtonLink = ({
 }) => (
   <a
     href={href}
-    className={cn(buttonVariants({ variant: "outline" }), "relative")}
+    className={cn(
+      buttonVariants({ variant: "outline" }),
+      "relative",
+      "justify-start"
+    )}
   >
     <span className="absolute left-4">{icon}</span>
     <span className="overflow-hidden text-ellipsis whitespace-nowrap pl-[36px] text-base">

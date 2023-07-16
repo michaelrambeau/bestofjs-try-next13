@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { Metadata, ResolvingMetadata } from "next";
 
 import { searchClient } from "@/app/backend";
 import { getHotProjectsRequest } from "@/app/backend-search-requests";
@@ -14,6 +15,18 @@ type PageProps = {
     slug: string;
   };
 };
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { slug } = params;
+  const project = await getData(slug);
+
+  return {
+    title: project.name,
+  };
+}
+
 export default async function ProjectDetailsPage({ params }: PageProps) {
   const { slug } = params;
   const project = await getData(slug);

@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Image from "next/image";
 
 import {
@@ -8,6 +9,10 @@ import {
 } from "@/config/site";
 import { Card } from "@/components/ui/card";
 import { ExternalLink, PageHeading } from "@/components/core/typography";
+
+export const metadata: Metadata = {
+  title: "About",
+};
 
 export default function AboutPage() {
   const count = 2000; // TODO fetch the total number of projects

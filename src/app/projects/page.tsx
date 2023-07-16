@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import NextLink from "next/link";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/20/solid";
 
@@ -48,6 +49,29 @@ type ProjectsPageData = {
 type PageProps = {
   searchParams: ProjectPageSearchParams;
 };
+
+export async function generateMetadata({
+  searchParams,
+}: PageProps): Promise<Metadata> {
+  const { selectedTags } = await getData(searchParams);
+  const searchState = parseSearchParams(searchParams);
+  const title = getPageTitle(selectedTags, searchState.query);
+
+  return {
+    title,
+  };
+}
+
+function getPageTitle(tags: BestOfJS.Tag[], query: string) {
+  if (!query && tags.length === 0) {
+    return "All Projects";
+  }
+  if (!query && tags.length > 0) {
+    return tags.map((tag) => tag.name).join(" + ");
+  }
+  return "Search results";
+}
+
 export default async function Projects({ searchParams }: PageProps) {
   const {
     projects,

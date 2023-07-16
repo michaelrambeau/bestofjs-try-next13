@@ -1,3 +1,5 @@
+import { Metadata } from "next";
+
 import { TagIcon } from "@/components/core";
 import { PageHeading } from "@/components/core/typography";
 import { TagPaginatedList } from "@/components/tag-list/tag-paginated-list";
@@ -17,6 +19,10 @@ type PageProps = {
     page?: string;
     sort?: string;
   };
+};
+
+export const metadata: Metadata = {
+  title: "All Tags",
 };
 
 export default async function TagsPage({ searchParams }: PageProps) {
