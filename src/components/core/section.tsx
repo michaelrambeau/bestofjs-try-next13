@@ -15,9 +15,7 @@ export const SectionHeading = ({ className, icon, title, subtitle }: Props) => {
       <div className="grow">
         <h2 className="text-2xl">{title}</h2>
         {subtitle && (
-          <div className="uppercase text-[var(--textSecondaryColor)]">
-            {subtitle}
-          </div>
+          <div className="uppercase text-muted-foreground">{subtitle}</div>
         )}
       </div>
     </div>

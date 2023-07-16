@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import formatUrl from "@/helpers/url";
 import { GoHome, GoMarkGithub } from "react-icons/go";
 import { ImNpm } from "react-icons/im";
@@ -8,19 +8,26 @@ import { buttonVariants } from "@/components/ui/button";
 import { ProjectAvatar } from "@/components/core";
 import { ProjectTagGroup } from "@/components/tags/project-tag";
 
+import { getProjectDetails } from "./get-project-details";
+
 type Props = { project: BestOfJS.Project };
-export const ProjectHeader = ({ project }: Props) => {
+export function ProjectHeader({ project }: Props) {
   const { full_name, packageName, repository, url } = project;
 
   return (
     <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:divide-x sm:divide-dashed">
-      <div className="flex min-h-[120px] grow items-center">
+      <div className="flex min-h-[120px] grow items-center divide-x divide-dashed">
         <div className="pr-4">
           <ProjectAvatar project={project} size={75} />
         </div>
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 pl-4">
           <h2 className="text-4xl">{project.name}</h2>
-          <div>{project.description}</div>
+          <div>
+            <Suspense fallback={project.description}>
+              {/* @ts-expect-error Server Component */}
+              <FullDescription project={project} />
+            </Suspense>
+          </div>
           <div>
             <ProjectTagGroup tags={project.tags} />
           </div>
@@ -38,7 +45,7 @@ export const ProjectHeader = ({ project }: Props) => {
         {packageName && (
           <ButtonLink
             href={`https://www.npmjs.com/package/${packageName}`}
-            icon={<ImNpm className="text-[20px]" />}
+            icon={<ImNpm className="text-[16px]" />}
           >
             {packageName}
           </ButtonLink>
@@ -46,7 +53,13 @@ export const ProjectHeader = ({ project }: Props) => {
       </aside>
     </div>
   );
-};
+}
+
+async function FullDescription({ project }: { project: BestOfJS.Project }) {
+  const projectWithDetails = await getProjectDetails(project);
+
+  return <>{projectWithDetails.description}</>;
+}
 
 const ButtonLink = ({
   href,
@@ -71,5 +84,3 @@ const ButtonLink = ({
     </span>
   </a>
 );
-
-//"btn-outline btn relative w-full justify-start normal-case"

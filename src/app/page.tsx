@@ -148,7 +148,11 @@ function PopularTagsList({ tags }: { tags: BestOfJS.Tag[] }) {
   return (
     <Card>
       <CardHeader>
-        <SectionHeading icon={<TagIcon fontSize={32} />} title="Popular Tags" />
+        <SectionHeading
+          icon={<TagIcon fontSize={32} />}
+          title="Popular Tags"
+          subtitle={<>by number of projects</>}
+        />
       </CardHeader>
       <CompactTagList tags={tags} />
       <div className="border-t p-4">
