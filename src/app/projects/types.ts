@@ -1,3 +1,5 @@
+import { SortOptionKey } from "@/components/project-list/sort-order-options";
+
 export type PaginationProps = {
   page: number;
   limit: number;
@@ -5,7 +7,7 @@ export type PaginationProps = {
 export type ProjectSearchQuery = {
   tags: string[];
   query: string;
-  sort: string;
+  sort: SortOptionKey;
   direction?: "desc" | "asc";
 } & PaginationProps;
 

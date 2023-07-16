@@ -4,7 +4,9 @@ import { ProjectSearchQuery } from "@/app/projects/types";
 
 import { SortOptionKey } from "./sort-order-options";
 
-// Raw params values from URLSearchParams get and getAll(), before parsing
+const DEFAULT_SEARCH_ORDER = "total";
+
+// Raw params values from URLSearchParams.get() and .getAll() methods, before any parsing
 export type ProjectPageSearchParams = {
   tags?: string[];
   query?: string;
@@ -23,7 +25,7 @@ export function stateToQueryString({
   const params = {
     query: query || undefined,
     tags: tags.length === 0 ? undefined : tags,
-    sort: sort === "" ? undefined : sort,
+    sort: sort === DEFAULT_SEARCH_ORDER ? undefined : sort,
     page: page === 1 ? undefined : page,
     direction,
   };
@@ -40,7 +42,7 @@ export function parseSearchParams(
     tags: toArray(params.tags),
     page: toInteger(params.page, 1),
     limit: toInteger(params.limit, 10),
-    sort: (params.sort || "total") as SortOptionKey,
+    sort: (params.sort || DEFAULT_SEARCH_ORDER) as SortOptionKey,
   };
 }
 
