@@ -2,9 +2,12 @@
   "name": "bestofjs-next13-prototype",
   "version": "0.0.1",
   "private": true,
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node ./scripts/build-project-data.mjs && next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -24,6 +27,7 @@
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@types/debug": "^4.1.8",
+    "@types/fs-extra": "^11.0.1",
     "@types/lodash": "^4.14.195",
     "@types/numeral": "^2.0.2",
     "class-variance-authority": "^0.4.0",
@@ -31,6 +35,7 @@
     "cmdk": "^0.2.0",
     "dayjs": "^1.11.8",
     "debug": "^4.3.4",
+    "fs-extra": "^11.1.1",
     "lodash": "^4.17.21",
     "lucide-react": "0.105.0-alpha.4",
     "mingo": "^6.4.1",
