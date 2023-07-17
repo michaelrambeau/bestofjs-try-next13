@@ -1,7 +1,6 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@headlessui/react': ^1.7.15
   '@heroicons/react': ^2.0.18
   '@ianvs/prettier-plugin-sort-imports': ^3.7.2
   '@radix-ui/react-collapsible': ^1.0.3
@@ -51,7 +50,6 @@ specifiers:
   vague-time: ^2.4.2
 
 dependencies:
-  '@headlessui/react': 1.7.15_biqbaboplfbrettd7655fr4n2y
   '@heroicons/react': 2.0.18_react@18.2.0
   '@radix-ui/react-collapsible': 1.0.3_2ejdisobb7q4dn5gvncpcai4wu
   '@radix-ui/react-dialog': 1.0.4_2ejdisobb7q4dn5gvncpcai4wu
@@ -371,18 +369,6 @@ packages:
       react-dom: '>=16.8.0'
     dependencies:
       '@floating-ui/dom': 1.2.9
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    dev: false
-
-  /@headlessui/react/1.7.15_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-OTO0XtoRQ6JPB1cKNFYBZv2Q0JMqMGNhYP1CjPvcJvjz8YGokz8oAj89HIYZGN0gZzn/4kk9iUpmMF4Q21Gsqw==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      react: ^16 || ^17 || ^18
-      react-dom: ^16 || ^17 || ^18
-    dependencies:
-      client-only: 0.0.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: false

@@ -45,7 +45,11 @@ export function MainNav() {
 
   return (
     <div className="flex gap-6 md:gap-8">
-      <Link href="/" className="flex items-center space-x-2">
+      <Link
+        href="/"
+        className="flex items-center space-x-2"
+        aria-label="Best of JS"
+      >
         <Icons.logo
           width={130}
           height={37.15}
