@@ -3,10 +3,9 @@ import numeral from "numeral";
 import { GoGitCommit, GoMarkGithub } from "react-icons/go";
 import { MdGroup } from "react-icons/md";
 
+import { Card, CardHeader } from "@/components/ui/card";
 import {
-  Card,
   CardBody,
-  CardHeader,
   CardSection,
   StarDelta,
   StarIcon,
@@ -24,7 +23,7 @@ export const ProjectDetailsGitHubCard = ({ project }: Props) => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="border-b">
         <div className="flex items-center space-x-2">
           <div>
             <GoMarkGithub size={20} />

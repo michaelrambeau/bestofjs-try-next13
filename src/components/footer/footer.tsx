@@ -5,7 +5,7 @@ import { RISING_STARS_URL, STATE_OF_JS_URL } from "@/config/site";
 
 export const Footer = () => {
   return (
-    <footer className="bg-base-200 text-base-content border-t p-10 py-6">
+    <footer className="bg-base-200 text-base-content border-t">
       <div className="app-container">
         <div className="grid grid-cols-3 py-10">
           <div>

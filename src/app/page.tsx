@@ -48,8 +48,8 @@ export default async function IndexPage() {
         </p>
       </div>
 
-      <div className="flex flex-col gap-4 lg:flex-row">
-        <div className="grow space-y-4">
+      <div className="flex flex-col gap-8 lg:flex-row">
+        <div className="grow space-y-6">
           <HotProjectList projects={hotProjects} />
 
           <NewestProjectList projects={newestProjects} />
@@ -75,7 +75,7 @@ function HotProjectList({ projects }: { projects: BestOfJS.Project[] }) {
     <Card>
       <CardHeader>
         <SectionHeading
-          icon={<GoFlame fontSize={48} />}
+          icon={<GoFlame fontSize={32} />}
           title="Hot Projects"
           subtitle={
             <>
@@ -112,7 +112,7 @@ function NewestProjectList({ projects }: { projects: BestOfJS.Project[] }) {
     <Card>
       <CardHeader>
         <SectionHeading
-          icon={<GoGift fontSize={48} />}
+          icon={<GoGift fontSize={32} />}
           title="Recently Added Projects"
           subtitle={
             <>

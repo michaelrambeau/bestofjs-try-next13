@@ -1,13 +1,13 @@
 import { Suspense } from "react";
 import { GoBook } from "react-icons/go";
 
-import { Card, CardHeader } from "@/components/core/card";
+import { Card, CardHeader } from "@/components/ui/card";
 import { ErrorBoundary } from "@/app/error-handling";
 
 export async function ReadmeCard({ project }: { project: BestOfJS.Project }) {
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="border-b">
         <div className="flex space-x-2">
           <GoBook size={24} />
           <div>README</div>
