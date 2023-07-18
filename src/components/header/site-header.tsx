@@ -25,7 +25,6 @@ export function SiteHeader() {
               </div>
             }
           >
-            {/* @ts-expect-error Server Component */}
             <SearchContainer />
           </Suspense>
           <nav className="flex items-center space-x-1">

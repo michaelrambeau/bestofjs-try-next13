@@ -1,17 +1,20 @@
+"use client";
+
+import useSWR from "swr";
+
 import { SearchPalette } from "@/components/search-palette/search-palette";
 
-import { searchClient } from "./backend";
+export function SearchContainer() {
+  const { data, error } = useSWR("search-data", fetchSearchData);
 
-export async function SearchContainer() {
-  const { allTags, allProjects } = await getData();
+  if (error) return <div className="text-xs">Unable to load data</div>;
+  if (!data)
+    return <div className="text-xs text-muted-foreground">Loading</div>;
 
-  return <SearchPalette allProjects={allProjects} allTags={allTags} />;
+  return <SearchPalette allProjects={data.projects} allTags={data.tags} />;
 }
 
-async function getData() {
-  const { tags: allTags } = await searchClient.findTags({
-    sort: { counter: -1 },
-  });
-  const allProjects = await searchClient.getSearchIndex();
-  return { allTags, allProjects };
+function fetchSearchData() {
+  const url = "/api/search-data";
+  return fetch(url).then((res) => res.json());
 }
