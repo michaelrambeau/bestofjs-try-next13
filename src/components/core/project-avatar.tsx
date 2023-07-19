@@ -7,11 +7,12 @@ type Props = {
   size: number;
 };
 export const ProjectAvatar = ({ project, size = 100 }: Props) => {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
+
   const { src, srcSet } = getProjectImageProps({
     project,
     size,
-    colorMode: (theme || "dark") as "dark" | "light",
+    colorMode: (resolvedTheme || "dark") as "dark" | "light",
   });
 
   return (
