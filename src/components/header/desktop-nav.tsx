@@ -6,57 +6,32 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { mainNavItems } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 
-export interface NavItem {
-  title: string;
-  href?: string;
-  disabled?: boolean;
-  external?: boolean;
-  isActive: (pathname: string) => boolean;
-}
-
-const mainNavItems: NavItem[] = [
-  {
-    title: "Home",
-    href: "/",
-    isActive: (pathname: string) => pathname === "/",
-  },
-  {
-    title: "Projects",
-    href: "/projects",
-    isActive: (pathname: string) => pathname.startsWith("/projects"),
-  },
-  {
-    title: "Tags",
-    href: "/tags",
-    isActive: (pathname: string) => pathname.startsWith("/tags"),
-  },
-  {
-    title: "About",
-    href: "/about",
-    isActive: (pathname: string) => pathname.startsWith("/about"),
-  },
-];
+import { MobileMenuButton } from "./mobile-nav";
 
 export function MainNav() {
   const pathname = usePathname();
 
   return (
-    <div className="flex gap-6 md:gap-8">
-      <Link
-        href="/"
-        className="flex items-center space-x-2"
-        aria-label="Best of JS"
-      >
-        <Icons.logo
-          width={130}
-          height={37.15}
-          className="h-[37.15px] w-[130px] text-orange-600 dark:text-yellow-400"
-        />
-      </Link>
-      {mainNavItems?.length ? (
+    <>
+      <div className="md:hidden">
+        <MobileMenuButton />
+      </div>
+      <div className="hidden gap-6 md:flex md:gap-8">
+        <Link
+          href="/"
+          className="flex items-center space-x-2"
+          aria-label="Best of JS"
+        >
+          <Icons.logo
+            width={130}
+            height={37.15}
+            className="h-[37.15px] w-[130px] text-orange-600 dark:text-yellow-400"
+          />
+        </Link>
         <nav className="flex gap-6">
           {mainNavItems?.map(
             (item, index) =>
@@ -77,7 +52,7 @@ export function MainNav() {
               )
           )}
         </nav>
-      ) : null}
-    </div>
+      </div>
+    </>
   );
 }

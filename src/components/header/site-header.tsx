@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
 import { buttonVariants } from "@/components/ui/button";
-import { MainNav } from "@/components/header/main-nav";
+import { MainNav } from "@/components/header/desktop-nav";
 import { Icons } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SearchContainer } from "@/app/search-container";
@@ -11,7 +11,7 @@ import { SearchContainer } from "@/app/search-container";
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
-      <div className="app-container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
+      <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <MainNav />
         <div className="flex flex-1 items-center justify-end space-x-4">
           {/*

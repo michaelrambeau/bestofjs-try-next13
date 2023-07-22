@@ -17,3 +17,34 @@ export const STATE_OF_JS_URL = `https://stateofjs.com`;
 export const APP_VERSION = process.env.NEXT_PUBLIC_VERSION || "0.0.0";
 export const ISSUE_TRACKER_URL = `https://github.com/michaelrambeau/bestofjs`;
 export const ADD_PROJECT_REQUEST_URL = `${ISSUE_TRACKER_URL}/issues/new?template=add-a-project-to-best-of-javascript.md`;
+
+export interface NavItem {
+  title: string;
+  href?: string;
+  disabled?: boolean;
+  external?: boolean;
+  isActive: (pathname: string) => boolean;
+}
+
+export const mainNavItems: NavItem[] = [
+  {
+    title: "Home",
+    href: "/",
+    isActive: (pathname: string) => pathname === "/",
+  },
+  {
+    title: "Projects",
+    href: "/projects",
+    isActive: (pathname: string) => pathname.startsWith("/projects"),
+  },
+  {
+    title: "Tags",
+    href: "/tags",
+    isActive: (pathname: string) => pathname.startsWith("/tags"),
+  },
+  {
+    title: "About",
+    href: "/about",
+    isActive: (pathname: string) => pathname.startsWith("/about"),
+  },
+];
