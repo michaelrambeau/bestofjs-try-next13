@@ -16,9 +16,9 @@ export const TagList = ({ tags }: Props) => {
       {tags.map((tag) => (
         <div
           key={tag.code}
-          className="flex w-full justify-between hover:bg-muted/50"
+          className="flex w-full flex-col justify-between gap-4 p-4 hover:bg-muted/50 md:flex-row"
         >
-          <div className="p-4">
+          <div className="">
             <NextLink
               href={`/projects?tags=${tag.code}`}
               className="text-secondary-foreground hover:underline"
@@ -29,7 +29,7 @@ export const TagList = ({ tags }: Props) => {
               {tag.counter} projects
             </span>
           </div>
-          <div className="flex items-center gap-4 px-4">
+          <div className="flex items-center gap-4">
             {tag.projects.map((project) => (
               <NextLink
                 key={project.slug}

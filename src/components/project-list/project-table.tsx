@@ -67,7 +67,7 @@ const ProjectTableRow = ({
 
   return (
     <tr data-testid="project-card" className="border-b hover:bg-muted/50">
-      <Cell className="w-[50px] p-4">
+      <Cell className="w-[50px] pl-4 sm:p-4">
         <NextLink href={path}>
           <ProjectAvatar project={project} size={48} />
         </NextLink>
@@ -114,12 +114,18 @@ const ProjectTableRow = ({
           </div>
         </div>
 
-        <div className="mb-3 mt-2 text-sm">
-          {project.description}
-          <div className="sm mt-2 md:hidden">
-            Updated {fromNow(project.pushed_at)},{" "}
-            {formatNumber(project.contributor_count)} contributors
-          </div>
+        <div className="mb-3 mt-2 space-y-2 text-sm">
+          <div>{project.description}</div>
+          {showDetails && (
+            <>
+              <div className="md:hidden">
+                Updated {fromNow(project.pushed_at)}
+              </div>
+              <div className="md:hidden">
+                {formatNumber(project.contributor_count)} contributors
+              </div>
+            </>
+          )}
         </div>
         <div>
           <ProjectTagGroup tags={project.tags} buildPageURL={buildPageURL} />
@@ -137,7 +143,7 @@ const ProjectTableRow = ({
       )}
 
       {metricsCell && (
-        <Cell className="w-[85px] text-center">{metricsCell(project)}</Cell>
+        <Cell className="w-[100px] p-4 text-right">{metricsCell(project)}</Cell>
       )}
     </tr>
   );

@@ -7,7 +7,7 @@ export const Footer = () => {
   return (
     <footer className="bg-base-200 text-base-content border-t">
       <div className="container">
-        <div className="grid grid-cols-3 py-10">
+        <div className="grid gap-8 py-10 sm:grid-cols-3">
           <div>
             <Image
               src="/logo.png"

@@ -35,7 +35,7 @@ type QueryParams = {
 const defaultTagSearchQuery = {
   criteria: {},
   sort: {},
-  limit: 0,
+  limit: 20,
   skip: 0,
 };
 
@@ -167,12 +167,6 @@ export function createSearchClient() {
 
     // return tags with the most popular projects, for each tag (used for `/tags` page)
     async findTagsWithProjects(rawSearchQuery: Partial<QueryParams>) {
-      const defaultTagSearchQuery = {
-        criteria: {},
-        sort: {},
-        limit: 0,
-        skip: 0,
-      };
       const searchQuery = { ...defaultTagSearchQuery, ...rawSearchQuery };
       const { criteria, sort, skip, limit } = searchQuery;
       const { populate, projectCollection, tagCollection } = await getData();
@@ -183,8 +177,8 @@ export function createSearchClient() {
       const tags = query
         .find(tagCollection)
         .sort(sort)
-        .limit(limit)
         .skip(skip)
+        .limit(limit)
         .all() as BestOfJS.TagWithProjects[];
 
       for await (const tag of tags) {

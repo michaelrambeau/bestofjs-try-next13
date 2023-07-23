@@ -59,11 +59,11 @@ export default async function IndexPage() {
         </div>
       </div>
 
-      <Separator />
+      <Separator className="-mx-4 w-auto sm:mx-0" />
 
       <BestOfJSSection project={bestOfJSProject} />
 
-      <Separator />
+      <Separator className="-mx-4 w-auto sm:mx-0" />
 
       <MoreProjectsSection />
     </div>
@@ -173,19 +173,21 @@ function PopularTagsList({ tags }: { tags: BestOfJS.Tag[] }) {
 
 function BestOfJSSection({ project }: { project: BestOfJS.Project | null }) {
   return (
-    <div className="flex flex-col justify-between gap-4 md:flex-row">
+    <div className="flex flex-col justify-between gap-4 sm:px-4 md:flex-row">
       <div>
         <SectionHeading
           className="mb-4"
           icon={<GoHeart fontSize={32} />}
           title={<>Do you find {APP_DISPLAY_NAME} useful?</>}
         />
-        <p className="mb-4">
-          Show your appreciation by starring the project on{" "}
-          <ExternalLink url={APP_REPO_URL}>GitHub</ExternalLink>, or becoming a{" "}
-          <ExternalLink url={SPONSOR_URL}>sponsor</ExternalLink>.
-        </p>
-        <p>Thank you for your support!</p>
+        <div className="pl-10">
+          <p>
+            Show your appreciation by starring the project on{" "}
+            <ExternalLink url={APP_REPO_URL}>GitHub</ExternalLink>, or becoming
+            a <ExternalLink url={SPONSOR_URL}>sponsor</ExternalLink>.
+          </p>
+          <p>Thank you for your support!</p>
+        </div>
       </div>
       <div className="flex flex-col gap-4">
         {project && (
@@ -221,24 +223,26 @@ function BestOfJSSection({ project }: { project: BestOfJS.Project | null }) {
 
 function MoreProjectsSection() {
   return (
-    <div>
+    <div className="sm:px-4">
       <SectionHeading
         className="mb-4"
         icon={<GoPlus fontSize={32} />}
         title="Do you want more projects?"
       />
-      <p>
-        <i>{APP_DISPLAY_NAME}</i> is a curated list of about 1500 open-source
-        projects related to the web platform and Node.js.
-      </p>
-      <p>
-        If you want to suggest a new project, please click on the following
-        link:{" "}
-        <ExternalLink url={ADD_PROJECT_REQUEST_URL}>
-          recommend a new project
-        </ExternalLink>
-        .
-      </p>
+      <div className="pl-10">
+        <p>
+          <i>{APP_DISPLAY_NAME}</i> is a curated list of about 1500 open-source
+          projects related to the web platform and Node.js.
+        </p>
+        <p>
+          If you want to suggest a new project, please click on the following
+          link:{" "}
+          <ExternalLink url={ADD_PROJECT_REQUEST_URL}>
+            recommend a new project
+          </ExternalLink>
+          .
+        </p>
+      </div>
     </div>
   );
 }

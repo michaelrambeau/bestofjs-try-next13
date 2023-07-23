@@ -2,6 +2,7 @@ import React from "react";
 
 import { Card } from "@/components/ui/card";
 
+import { CardHeader } from "../core";
 import {
   BottomPaginationControls,
   TopPaginationControls,
@@ -47,24 +48,24 @@ export const ProjectPaginatedList = ({
 
   return (
     <Card>
-      {(showSortOptions || showPagination) && (
-        <div className="flex flex-col justify-between space-x-4 border-b p-4 md:flex-row">
-          <div>
+      <CardHeader>
+        {(showSortOptions || showPagination) && (
+          <div className="flex flex-col justify-between gap-4 md:flex-row">
             {showSortOptions && (
               <ProjectSortOrderPicker
                 value={sortOptionId as SortOptionKey}
                 searchState={searchState}
               />
             )}
+            {showPagination && (
+              <TopPaginationControls
+                paginationState={paginationState}
+                buildPageURL={buildPageURL}
+              />
+            )}
           </div>
-          {showPagination && (
-            <TopPaginationControls
-              paginationState={paginationState}
-              buildPageURL={buildPageURL}
-            />
-          )}
-        </div>
-      )}
+        )}
+      </CardHeader>
       <ProjectTable
         projects={projects}
         buildPageURL={buildPageURL}

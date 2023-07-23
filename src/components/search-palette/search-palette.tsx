@@ -130,7 +130,7 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
       <Button
         variant="outline"
         className={cn(
-          "relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64"
+          "relative ml-4 h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64"
         )}
         onClick={() => setOpen(true)}
       >
