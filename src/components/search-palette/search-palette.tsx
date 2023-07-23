@@ -43,7 +43,7 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
   // The search palette is mounted only once, we need to sync the tags when the URL changes
   React.useEffect(() => {
     setCurrentTagCodes(searchState.tags);
-  }, [JSON.stringify(searchState.tags)]);
+  }, [JSON.stringify(searchState.tags)]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const removeTag = (tagCode: string) =>
     setCurrentTagCodes((state) => state.filter((tag) => tag !== tagCode));
@@ -104,9 +104,9 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
 
   const onSelectTag = (itemValue: string) => {
     const tagCode = itemValue.slice("tag/".length);
-    const nextState = { ...searchState, tags: [...searchState.tags, tagCode] };
-    const qs = stateToQueryString(nextState);
-    goToURL(`/projects/?${qs}`);
+    const nextState = { ...searchState, tags: [...currentTagCodes, tagCode] };
+    const queryString = stateToQueryString(nextState);
+    goToURL(`/projects/?${queryString}`);
   };
 
   const onSelectSearchForText = () => {
