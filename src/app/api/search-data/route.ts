@@ -6,6 +6,7 @@ export async function GET(req: Request) {
   const projects = await searchClient.getSearchIndex();
   const { tags } = await searchClient.findTags({
     sort: { counter: -1 },
+    limit: 0, // grab all tags
   });
 
   const output = { projects, tags };
