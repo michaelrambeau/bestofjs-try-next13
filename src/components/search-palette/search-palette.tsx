@@ -3,10 +3,11 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/20/solid";
+import { GoHome, GoMarkGithub } from "react-icons/go";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   CommandDialog,
   CommandEmpty,
@@ -169,21 +170,59 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
               {searchQuery.length > 0 && (
                 <CommandGroup heading="Projects">
                   {filteredProjects.slice(0, 10).map((project) => (
-                    <CommandItem
-                      key={project.slug}
-                      value={`project/` + project.slug}
-                      onSelect={onSelectProject}
-                    >
-                      <div className="grid w-full grid-cols-[32px_1fr_100px] items-center gap-4">
-                        <div className="items-center justify-center">
-                          <ProjectAvatar project={project} size={32} />
+                    <div className="grid gap-2 md:grid-cols-[1fr_40px_40px]">
+                      <CommandItem
+                        key={project.slug}
+                        value={`project/` + project.slug}
+                        onSelect={onSelectProject}
+                      >
+                        <div className="grid w-full grid-cols-[32px_1fr_100px] items-center gap-4">
+                          <div className="items-center justify-center">
+                            <ProjectAvatar project={project} size={32} />
+                          </div>
+                          <div className="">{project.name}</div>
+                          <div className="text-right">
+                            <StarTotal value={project.stars} />
+                          </div>
                         </div>
-                        <div className="">{project.name}</div>
-                        <div className="text-right">
-                          <StarTotal value={project.stars} />
-                        </div>
+                      </CommandItem>
+                      <div className="hidden items-center md:flex">
+                        <a
+                          href={`https://github.com/` + project.full_name}
+                          aria-label="GitHub repository"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          className={cn(
+                            buttonVariants({ variant: "ghost" }),
+                            "rounded-full",
+                            "w-10",
+                            "h-10",
+                            "p-0"
+                          )}
+                        >
+                          <GoMarkGithub size={24} />
+                        </a>
                       </div>
-                    </CommandItem>
+                      {project.url && (
+                        <div className="hidden items-center md:flex">
+                          <a
+                            href={project.url}
+                            aria-label="Project's homepage"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            className={cn(
+                              buttonVariants({ variant: "ghost" }),
+                              "rounded-full",
+                              "w-10",
+                              "h-10",
+                              "p-0"
+                            )}
+                          >
+                            <GoHome size={24} />
+                          </a>
+                        </div>
+                      )}
+                    </div>
                   ))}
                   {searchQuery.length > 2 && (
                     <CommandItem

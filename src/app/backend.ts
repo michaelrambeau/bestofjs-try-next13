@@ -226,6 +226,7 @@ export function createSearchClient() {
         description: 1,
         stars: 1,
         tags: 1,
+        url: 1,
       };
       const rawProjects = mingo
         .find(projectCollection, {}, projection)

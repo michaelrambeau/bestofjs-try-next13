@@ -48,6 +48,7 @@ declare namespace BestOfJS {
     | "owner_id"
     | "stars"
     | "tags"
+    | "url"
   > & { slug: string };
 
   // Project with extra data coming from the dynamic API
