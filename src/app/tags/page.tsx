@@ -1,17 +1,17 @@
 import { Metadata } from "next";
 
-import { TagIcon } from "@/components/core";
-import { PageHeading } from "@/components/core/typography";
 import { TagPaginatedList } from "@/components/tag-list/tag-paginated-list";
 import { searchClient } from "@/app/backend";
 import { SearchQueryUpdater } from "@/app/projects/types";
 
+import TagListLoading from "./loading";
 import {
   TagSearchQuery,
   getTagListSortOptionByValue,
   tagListSortSlugs,
   tagSearchStateToQueryString,
 } from "./tag-list-shared";
+import { TagsPageShell } from "./tags-page-shell";
 
 type PageProps = {
   searchParams: {
@@ -20,6 +20,8 @@ type PageProps = {
     sort?: string;
   };
 };
+
+const showLoadingPage = false; // for debugging purpose only
 
 export const metadata: Metadata = {
   title: "All Tags",
@@ -38,9 +40,10 @@ export default async function TagsPage({ searchParams }: PageProps) {
     return "/tags?" + queryString;
   }
 
+  if (showLoadingPage) return <TagListLoading />;
+
   return (
-    <>
-      <PageHeading title="All Tags" icon={<TagIcon size={32} />} />
+    <TagsPageShell>
       <TagPaginatedList
         tags={tags}
         page={page}
@@ -50,7 +53,7 @@ export default async function TagsPage({ searchParams }: PageProps) {
         buildTagsPageURL={buildTagsPageURL}
         searchState={searchState}
       />
-    </>
+    </TagsPageShell>
   );
 }
 

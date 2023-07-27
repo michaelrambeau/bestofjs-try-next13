@@ -7,7 +7,7 @@ type Props = {
 };
 export const PageHeading = ({ icon, subtitle, title }: Props) => {
   return (
-    <div className="mb-4 flex items-center">
+    <div className="mb-6 flex items-center">
       {icon && <div className="pr-2 text-yellow-500">{icon}</div>}
       <div className="grow">
         <h1 className="text-3xl">{title}</h1>

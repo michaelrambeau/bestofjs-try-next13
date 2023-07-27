@@ -22,6 +22,7 @@ import { SearchPageTagPicker, TagPicker } from "@/components/tags/tag-picker";
 // import { TagPickerPopover } from "@/components/tag-picker/tag-picker-popover"
 
 import { searchClient } from "../backend";
+import ProjectListLoading from "./loading";
 import {
   ProjectSearchQuery,
   SearchQueryUpdater,
@@ -72,6 +73,8 @@ function getPageTitle(tags: BestOfJS.Tag[], query: string) {
   return "Search results";
 }
 
+const showLoadingPage = false; // for debugging purpose only
+
 export default async function Projects({ searchParams }: PageProps) {
   const {
     projects,
@@ -83,6 +86,8 @@ export default async function Projects({ searchParams }: PageProps) {
     relevantTags,
     allTags,
   } = await getData(searchParams);
+
+  if (showLoadingPage) return <ProjectListLoading />;
 
   const searchState = parseSearchParams(searchParams);
 
@@ -99,12 +104,14 @@ export default async function Projects({ searchParams }: PageProps) {
         tags={selectedTags}
         total={total}
       />
-      <CurrentTags
-        tags={selectedTags}
-        buildPageURL={buildPageURL}
-        allTags={allTags}
-        textQuery={searchState.query}
-      />
+      {selectedTags.length > 0 && (
+        <CurrentTags
+          tags={selectedTags}
+          buildPageURL={buildPageURL}
+          allTags={allTags}
+          textQuery={searchState.query}
+        />
+      )}
       {relevantTags.length > 0 && (
         <RelevantTags tags={relevantTags} buildPageURL={buildPageURL} />
       )}
