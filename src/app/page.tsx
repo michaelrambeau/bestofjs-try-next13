@@ -26,6 +26,7 @@ import {
   getHotProjectsRequest,
   getLatestProjects,
 } from "./backend-search-requests";
+import { LatestMonthlyRankings } from "./latest-monthly-rankings";
 
 // Try to revalidate the home page every hour to take into account changes from the API
 // as `revalidate` param used in `fetch` request to get data does not seem to work
@@ -58,6 +59,9 @@ export default async function IndexPage() {
           <PopularTagsList tags={popularTags} />
         </div>
       </div>
+
+      {/* @ts-expect-error Server Component */}
+      <LatestMonthlyRankings />
 
       <Separator className="-mx-4 w-auto sm:mx-0" />
 

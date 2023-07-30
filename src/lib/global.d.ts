@@ -38,6 +38,9 @@ declare namespace BestOfJS {
     tags: Tag[];
   }
 
+  // Project with an additional score, used for the monthly rankings
+  type ProjectWithScore = BestOfJS.Project & { score: number };
+
   type SearchIndexProject = Pick<
     RawProject,
     | "description"

@@ -43,8 +43,14 @@ export const mainNavItems: NavItem[] = [
     isActive: (pathname: string) => pathname.startsWith("/tags"),
   },
   {
-    title: "About",
-    href: "/about",
-    isActive: (pathname: string) => pathname.startsWith("/about"),
+    title: "Monthly",
+    href: "/rankings/monthly",
+    isActive: (pathname: string) => pathname.startsWith("/rankings"),
   },
+  // TODO: add a "More" button to reveal more links from the top nav bar?
+  // {
+  //   title: "About",
+  //   href: "/about",
+  //   isActive: (pathname: string) => pathname.startsWith("/about"),
+  // },
 ];
