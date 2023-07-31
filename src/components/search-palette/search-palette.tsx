@@ -318,7 +318,7 @@ function Loading({ item }: { item: SelectedItem }) {
   if (item.type === "tag") {
     return <LoadingTag tags={item.value} />;
   }
-  return "Loading";
+  return <>Loading</>;
 }
 
 function LoadingProject({ project }: { project: BestOfJS.SearchIndexProject }) {
