@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import { GoCalendar } from "react-icons/go";
 
@@ -20,6 +21,17 @@ type PageProps = {
     month: string;
   };
 };
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const date = parsePageParams(params);
+
+  return {
+    title: "Rankings " + formatMonthlyDate(date),
+  };
+}
+
 export default async function MonthlyRankingPage({ params }: PageProps) {
   const date = parsePageParams(params);
   const { isFirst, isLatest, projects } = await fetchMonthlyRankings({
@@ -80,20 +92,16 @@ const MonthlyRankingsNavigator = ({
       >
         <ChevronLeftIcon fontSize="28px" />
         <span className="hidden sm:block">
-          <RankingsDate date={previousMonth} />
+          {formatMonthlyDate(previousMonth)}
         </span>
       </NavigationButton>
-      <div className="text-lg">
-        <RankingsDate date={date} />
-      </div>
+      <div className="text-lg">{formatMonthlyDate(date)}</div>
       <NavigationButton
         isDisabled={isLatest}
         url={buildRankingsURL(nextMonth)}
         label="Next month"
       >
-        <span className="hidden sm:block">
-          <RankingsDate date={nextMonth} />
-        </span>
+        <span className="hidden sm:block">{formatMonthlyDate(nextMonth)}</span>
         <ChevronRightIcon fontSize="28px" />
       </NavigationButton>
     </div>
@@ -154,30 +162,25 @@ function getNextMonth(date: MonthlyDate): MonthlyDate {
     : { year, month: month + 1 };
 }
 
-const RankingsDate = ({ date }: { date: MonthlyDate }) => {
-  return (
-    <>
-      {monthNames[date.month - 1]} {date.year.toString()}
-    </>
-  );
+const formatMonthlyDate = (date: MonthlyDate) => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  return monthNames[date.month - 1] + " " + date.year.toString();
 };
 
 function parsePageParams(params: PageProps["params"]) {
   const { year, month } = params;
   return { year: parseInt(year), month: parseInt(month) };
 }
-
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
