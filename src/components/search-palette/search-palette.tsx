@@ -40,6 +40,9 @@ type SelectedItem =
   | {
       type: "tag";
       value: BestOfJS.Tag[];
+    }
+  | {
+      type: "text";
     };
 export function SearchPalette({ allProjects, allTags }: SearchProps) {
   const router = useRouter();
@@ -130,6 +133,7 @@ export function SearchPalette({ allProjects, allTags }: SearchProps) {
   };
 
   const onSelectSearchForText = () => {
+    setSelectedItem({ type: "text" });
     goToURL(`/projects?query=${searchQuery}`);
   };
 

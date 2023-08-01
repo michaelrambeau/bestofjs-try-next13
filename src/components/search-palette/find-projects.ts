@@ -1,3 +1,5 @@
+import orderBy from "lodash/orderBy";
+
 export function filterProjectsByTagsAndQuery<
   T extends Omit<BestOfJS.SearchIndexProject, "slug">
 >(projects: T[], tags: string[], query: string) {
@@ -16,9 +18,13 @@ export function filterProjectsByTags<
 export function filterProjectsByQuery<
   T extends Omit<BestOfJS.SearchIndexProject, "slug">
 >(projects: T[], query: string) {
-  return projects
-    .map((project) => ({ ...project, rank: rank(project, query) }))
-    .filter((project) => project.rank > 0);
+  return orderBy(
+    projects
+      .map((project) => ({ ...project, rank: rank(project, query) }))
+      .filter((project) => project.rank > 0),
+    "rank",
+    "desc"
+  );
 }
 
 // for a given project and a query,
